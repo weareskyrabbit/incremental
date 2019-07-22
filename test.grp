@@ -1,0 +1,9 @@
+{
+    Number n;
+    Number m;
+    n = 100;
+    m = 50;
+    while (1) {
+        Number n;
+    }
+}
