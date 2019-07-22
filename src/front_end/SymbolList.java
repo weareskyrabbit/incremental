@@ -5,14 +5,16 @@ import java.util.Map;
 
 public class SymbolList {
     final SymbolList enclosing;
-    private final Map<String, Integer> symbols;
+    final Map<String, LocalVariable> symbols;
+    private int size;
     SymbolList(final SymbolList enclosing) {
         this.enclosing = enclosing;
-        symbols = new HashMap<>();
+        this.symbols = new HashMap<>();
+        this.size = 0;
     }
     void declare(final String name) {
         if (!symbols.containsKey(name)) {
-            symbols.put(name, 0);
+            symbols.put(name, new LocalVariable(name, size++));
         } else {
             System.out.println("`" + name + "` is already declared");
             System.exit(1);
@@ -27,14 +29,15 @@ public class SymbolList {
             return false;
         }
     }
-    void assign(final String name, final int value) {
+    LocalVariable get(final String name) {
         if (symbols.containsKey(name)) {
-            symbols.replace(name, value);
+            return symbols.get(name);
         } else if (enclosing != null) {
-            enclosing.assign(name, value);
+            return enclosing.get(name);
         } else {
             System.out.println("`" + name + "` is undeclared");
             System.exit(1);
         }
+        return null;
     }
 }

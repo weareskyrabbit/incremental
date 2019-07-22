@@ -51,7 +51,7 @@ public class Parser {
             consume("=");
             int value = integer();
             consume(";");
-            return new Assignment(name, value);
+            return new Assignment(current.get(name), value);
         }
     }
     private boolean match(final String token) {

@@ -1,15 +1,24 @@
 package front_end;
 
 public class Assignment extends Statement {
-    final String name;
+    final LocalVariable variable;
     final int value;
-    Assignment(final String name, final int value) {
-        this.name = name;
+    Assignment(final LocalVariable variable, final int value) {
+        this.variable = variable;
         this.value = value;
     }
-
+    @Override
+    String build() {
+        return "  mov rax, rbp\n" +
+                "  sub rax, " +
+                variable.offset +
+                "\n" +
+                "  mov [rax], " +
+                value +
+                "\n";
+    }
     @Override
     public String toString() {
-        return "(assign " + name + " " + value + ")";
+        return "(assign " + variable.name + " " + value + ")";
     }
 }
