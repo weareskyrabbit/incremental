@@ -1,5 +1,8 @@
 package front_end;
 
-public class BinaryOperator extends Node {
-
+public class BinaryOperator implements Node {
+    @Override
+    public String build() {
+        return null;
+    }
 }

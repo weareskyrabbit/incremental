@@ -1,4 +1,5 @@
 package front_end;
 
-public class Node {
+public interface Node {
+    String build();
 }

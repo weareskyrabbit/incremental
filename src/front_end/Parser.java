@@ -2,61 +2,101 @@ package front_end;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Parser {
     private String input;
     private SymbolList current;
+    /* private Node pointer; */
     public int line;
     public int offset;
 
-    public Closure parse(String input) throws ParsingException {
+    public List<Function> parse(String input) throws ParsingException {
         this.input = input;
         this.current = null;
         this.line = 0;
+        this.offset = 0;
+        final List<Function> functions = new ArrayList<>();
+        while (match("Number")) {
+            Function function = function_declaration();
+            functions.add(function);
+        }
+        return functions;
+    }
+    private Function function_declaration() throws ParsingException {
+        SymbolList symbols = new SymbolList(current);
+        current = symbols;
+        consume("Number");
+        String name = identifier();
+        consume('(');
+        if (!match(')')) {
+            consume("Number");
+            String argument = identifier();
+            current.declare(argument);
+            while (match(',')) {
+                consume(',');
+                consume("Number");
+                argument = identifier();
+                current.declare(argument);
+            }
+        }
+        consume(')');
         Closure closure = closure();
-        return closure;
+        current = current.enclosing;
+        return new Function(name, symbols, closure);
     }
     private Closure closure() throws ParsingException {
         SymbolList symbols = new SymbolList(current);
         current = symbols;
-        consume("{");
+        consume('{');
         while (match("Number")) {
             declaration();
         }
-        ArrayList<Statement> statements = new ArrayList<>();
-        while (!match("}")) {
+        List<Statement> statements = new ArrayList<>();
+        while (!match('}')) {
             Statement statement = statement();
             statements.add(statement);
         }
-        consume("}");
+        consume('}');
         current = current.enclosing;
         return new Closure(symbols, statements);
     }
     private void declaration() throws ParsingException {
         consume("Number");
         String name = identifier();
-        consume(";");
+        consume(';');
         current.declare(name);
     }
     private Statement statement() throws ParsingException {
-        if (match("while")) {
-            consume("while");
-            consume("(");
+        if (match("if")) {
+            consume("if");
+            consume('(');
             int condition = integer();
-            consume(")");
+            consume(')');
+            Closure then_closure = closure();
+            return new If(condition, then_closure);
+        } else if (match("while")) {
+            consume("while");
+            consume('(');
+            int condition = integer();
+            consume(')');
             Closure closure = closure();
             return new While(condition, closure);
         } else {
             String name = identifier();
-            consume("=");
+            consume('=');
             int value = integer();
-            consume(";");
+            consume(';');
             return new Assignment(current.get(name), value);
         }
     }
     private boolean match(final String token) {
         skip_whitespace();
-        return input.startsWith(token);
+        return input.startsWith(token) && !Character.isLetterOrDigit(input.charAt(token.length()));
+    }
+    private boolean match(final char operator) {
+        skip_whitespace();
+        return input.charAt(0) == operator;
     }
     private void consume(final String token) throws ParsingException {
         if (match(token)) {
@@ -66,9 +106,17 @@ public class Parser {
             throw new ParsingException();
         }
     }
+    private void consume(final char operator) throws ParsingException{
+        if (match(operator)) {
+            input = input.substring(1);
+            offset++;
+        } else {
+            throw new ParsingException();
+        }
+    }
     private UnaryOperator minus() throws ParsingException {
         /*
-        consume("-");
+        consume('-');
 
         return new UnaryOperator();
         */
@@ -77,7 +125,7 @@ public class Parser {
     private BinaryOperator add() throws ParsingException {
         /*
          left = integer();
-        consume("+");
+        consume('+');
         int right = integer();
         return BinaryOperator()
         */
@@ -85,6 +133,23 @@ public class Parser {
     }
     private BinaryOperator multiply() {
         return null;
+    }
+    private void term() throws ParsingException {
+        // TODO replace it with look-ahead
+        char head = input.charAt(0);
+        if (Character.isDigit(head)) {
+            integer();
+        } else if (Character.isLetter(head)) {
+            identifier();
+            if (match('(')) {
+                consume('(');
+                consume(')');
+            }
+        } else {
+            consume('(');
+            /* expression(); */
+            consume(')');
+        }
     }
     private String identifier() throws ParsingException {
         skip_whitespace();
@@ -144,5 +209,12 @@ public class Parser {
         }
         input = input.substring(length);
         offset += length;
+    }
+    public static String tab(int tab) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < tab; i++) {
+            builder.append(' ');
+        }
+        return builder.toString();
     }
 }

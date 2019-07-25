@@ -1,7 +1,7 @@
 package front_end;
 
-public class Statement extends Node {
-    String build() {
-        return null;
-    }
+public interface Statement extends Node {
+    String toS(int tab);
+    @Override
+    String build();
 }

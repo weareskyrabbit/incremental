@@ -1,24 +1,25 @@
 package back_end;
 
-import front_end.Closure;
+import front_end.Function;
+
+import java.util.List;
 
 public class Builder {
-    public String build(final Closure tree) {
-        return ".intel_syntax noprefix\n" +
-                ".global main\n" +
-                "main:\n" +
-                tree.build();
+    public String build(final List<Function> tree) {
+        final StringBuilder assembly = new StringBuilder(".intel_syntax noprefix\n");
+        tree.forEach(method -> assembly.append(method.build()));
+        return assembly.toString();
     }
     public static String prologue(final int locals) {
         return "  push rbp\n" +
-                "  mov rbp, rsp\n" +
-                "  sub rsp, " +
+                "  mov  rbp, rsp\n" +
+                "  sub  rsp, " +
                 locals +
                 '\n';
     }
     public static String epilogue() {
-        return "  mov rsp, rbp\n" +
-                "  pop rbp\n" +
+        return "  mov  rsp, rbp\n" +
+                "  pop  rbp\n" +
                 "  ret\n";
     }
 }

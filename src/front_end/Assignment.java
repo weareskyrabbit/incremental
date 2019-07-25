@@ -1,6 +1,6 @@
 package front_end;
 
-public class Assignment extends Statement {
+public class Assignment implements Statement {
     final LocalVariable variable;
     final int value;
     Assignment(final LocalVariable variable, final int value) {
@@ -8,17 +8,17 @@ public class Assignment extends Statement {
         this.value = value;
     }
     @Override
-    String build() {
-        return "  mov rax, rbp\n" +
-                "  sub rax, " +
+    public String build() {
+        return "  mov  rax, rbp\n" +
+                "  sub  rax, " +
                 variable.offset +
                 "\n" +
-                "  mov [rax], " +
+                "  mov  [rax], " +
                 value +
                 "\n";
     }
     @Override
-    public String toString() {
+    public String toS(int tab) {
         return "(assign " + variable.name + " " + value + ")";
     }
 }

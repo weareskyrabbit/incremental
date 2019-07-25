@@ -1,37 +1,46 @@
 package front_end;
 
-public class While extends Statement {
+import static front_end.Parser.tab;
+
+public class While implements Statement {
     final int condition;
     final Closure closure;
-    private int count;
+    private static int count;
     While(final int condition, final Closure closure) {
         this.condition = condition;
         this.closure = closure;
     }
     @Override
-    String build() {
-        String assembly = ".Lbegin" +
+    public String build() {
+        String assembly = ".Lwhilebegin" +
                 count +
                 ":\n" +
-                "  mov rax, " +
+                "  mov  rax, " +
                 condition +
                 '\n' +
-                "  cmp rax, 0\n" +
-                "  je  .Lend" +
+                "  cmp  rax, 0\n" +
+                "  je   .Lend" +
                 count +
                 '\n' +
                 closure.build() +
-                "  jmp .Lbegin" +
+                "  jmp  .Lwhilebegin" +
                 count +
                 '\n' +
-                ".Lend" +
+                ".Lwhileend" +
                 count +
                 ":\n";
         count++;
         return assembly;
     }
-    @Override
-    public String toString() {
-        return "(while " + condition + " " + closure + ")";
+    public String toS(int tab) {
+        StringBuilder s = new StringBuilder();
+        s.append("(while ")
+                .append(condition)
+                .append('\n');
+        tab += 7;
+        s.append(tab(tab))
+                .append(closure.to_S(tab))
+                .append(')');
+        return s.toString();
     }
 }

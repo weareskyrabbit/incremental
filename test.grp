@@ -1,10 +1,15 @@
-{
+Number add() {
     Number n;
+}
+Number main() {
     Number m;
-    n = 100;
-    m = 50;
+    Number n;
+    m = 100;
+    n = 50;
     while (1) {
-        Number n;
-        n = 50;
+        Number m;
+        if (0) {
+            m = 50;
+        }
     }
 }
