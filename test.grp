@@ -1,3 +1,5 @@
+// short comment
+/* long comment */
 Number add(Number a, Number b) {
     return 0;
 }

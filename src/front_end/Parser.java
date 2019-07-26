@@ -6,16 +6,16 @@ import java.util.List;
 
 public class Parser {
     private String input;
+    private ParsingState state;
     private SymbolList current;
     /* private Node pointer; */
     public int line;
-    public int offset;
 
     public List<FunctionDeclaration> parse(String input) throws ParsingException {
         this.input = input;
+        state = ParsingState.STANDARD;
         this.current = null;
         this.line = 1;
-        this.offset = 1;
         final List<FunctionDeclaration> function_declarations = new ArrayList<>();
         while (match("Number")) {
             FunctionDeclaration function_declaration = function_declaration();
@@ -123,7 +123,6 @@ public class Parser {
     private void consume(final String token) throws ParsingException {
         if (match(token)) {
             input = input.substring(token.length());
-            offset += token.length();
         } else {
             throw new ParsingException();
         }
@@ -131,7 +130,6 @@ public class Parser {
     private void consume(final char operator) throws ParsingException{
         if (match(operator)) {
             input = input.substring(1);
-            offset++;
         } else {
             throw new ParsingException();
         }
@@ -191,7 +189,6 @@ public class Parser {
                 }
             }
             input = input.substring(identifier.length());
-            offset += identifier.length();
             return identifier.toString();
         } else {
             throw new ParsingException();
@@ -212,7 +209,6 @@ public class Parser {
                 }
             }
             input = input.substring(integer.length());
-            offset += integer.length();
             return Integer.parseInt(integer.toString());
         } else {
             throw new ParsingException();
@@ -221,19 +217,68 @@ public class Parser {
     private void skip_whitespace() {
         char[] array = input.toCharArray();
         int length = 0;
+        char previous = ' ';
         for (char head : array) {
-            if (head == '\n') {
-                line++;
-                offset = 1;
-                length++;
-            } else if (Character.isWhitespace(head)) {
-                length++;
-            } else {
-                break;
+            switch (state) {
+                case STANDARD:
+                    if (head == '\n') {
+                        line++;
+                        length++;
+                        break;
+                    } else if (Character.isWhitespace(head)) {
+                        length++;
+                        break;
+                    } else if (previous == '/') {
+                        if (head == '/') {
+                            length++;
+                            previous = ' ';
+                            state = ParsingState.SHORT_COMMENT;
+                            break;
+                        } else if (head == '*') {
+                            length++;
+                            previous = ' ';
+                            state = ParsingState.LONG_COMMENT;
+                            break;
+                        }
+                    } else if (head == '/') {
+                        length++;
+                        previous = '/';
+                        break;
+                    } else {
+                        input = input.substring(length);
+                        return;
+                    }
+                case SHORT_COMMENT:
+                    if (head == '\n') {
+                        line++;
+                        length++;
+                        state = ParsingState.STANDARD;
+                        break;
+                    } else {
+                        length++;
+                        break;
+                    }
+                case LONG_COMMENT:
+                    if (head == '\n') {
+                        line++;
+                        length++;
+                        break;
+                    } else if (head == '*') {
+                        previous = '*';
+                        length++;
+                        break;
+                    } else if (previous == '*' && head == '/') {
+                        previous = ' ';
+                        length++;
+                        state = ParsingState.STANDARD;
+                        break;
+                    } else {
+                        length++;
+                        break;
+                    }
             }
         }
         input = input.substring(length);
-        offset += length;
     }
     public static String tab(int tab) {
         StringBuilder builder = new StringBuilder();
