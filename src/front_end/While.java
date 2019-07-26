@@ -39,7 +39,7 @@ public class While implements Statement {
                 .append('\n');
         tab += 7;
         s.append(tab(tab))
-                .append(closure.to_S(tab))
+                .append(closure.toS(tab))
                 .append(')');
         return s.toString();
     }

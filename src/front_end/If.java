@@ -17,7 +17,7 @@ public class If implements Statement {
                 .append('\n');
         tab += 4;
         s.append(tab(tab))
-                .append(then_closure.to_S(tab))
+                .append(then_closure.toS(tab))
                 .append(')');
         return s.toString();
     }

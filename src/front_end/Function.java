@@ -19,7 +19,7 @@ public class Function implements Node {
                 .append('\n');
         tab += 9;
         s.append(tab(tab))
-                .append(closure.to_S(tab))
+                .append(closure.toS(tab))
                 .append(')');
         return s.toString();
     }

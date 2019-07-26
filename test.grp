@@ -1,5 +1,5 @@
-Number add() {
-    Number n;
+Number add(Number a, Number b) {
+    return 0;
 }
 Number main() {
     Number m;
@@ -12,4 +12,5 @@ Number main() {
             m = 50;
         }
     }
+    return 0;
 }

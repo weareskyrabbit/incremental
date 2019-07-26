@@ -10,7 +10,7 @@ public class UnaryOperator implements Node {
         return null;
     }
     @Override
-    public String toString() {
+    public String toS(int tab) {
         return "(- " + operand + ")";
     }
 }

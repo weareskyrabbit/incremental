@@ -5,4 +5,8 @@ public class BinaryOperator implements Node {
     public String build() {
         return null;
     }
+    @Override
+    public String toS(int tab) {
+        return null;
+    }
 }

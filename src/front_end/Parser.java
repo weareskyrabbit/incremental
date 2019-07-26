@@ -26,16 +26,16 @@ public class Parser {
     private Function function_declaration() throws ParsingException {
         SymbolList symbols = new SymbolList(current);
         current = symbols;
-        consume("Number");
+        type();
         String name = identifier();
         consume('(');
         if (!match(')')) {
-            consume("Number");
+            type();
             String argument = identifier();
             current.declare(argument);
             while (match(',')) {
                 consume(',');
-                consume("Number");
+                type();
                 argument = identifier();
                 current.declare(argument);
             }
@@ -62,7 +62,7 @@ public class Parser {
         return new Closure(symbols, statements);
     }
     private void declaration() throws ParsingException {
-        consume("Number");
+        type();
         String name = identifier();
         consume(';');
         current.declare(name);
@@ -82,6 +82,11 @@ public class Parser {
             consume(')');
             Closure closure = closure();
             return new While(condition, closure);
+        } else if (match("return")) {
+            consume("return");
+            int operand = integer();
+            consume(";");
+            return new Return(operand);
         } else {
             String name = identifier();
             consume('=');
@@ -150,6 +155,9 @@ public class Parser {
             /* expression(); */
             consume(')');
         }
+    }
+    private void type() throws ParsingException {
+        consume("Number");
     }
     private String identifier() throws ParsingException {
         skip_whitespace();

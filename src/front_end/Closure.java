@@ -19,10 +19,10 @@ public class Closure implements Node {
         StringBuilder assembly = new StringBuilder();
         assembly.append(Builder.prologue(symbols.symbols.size() * 8));
         statements.forEach(statement -> assembly.append(statement.build()));
-        assembly.append(Builder.epilogue());
         return assembly.toString();
     }
-    public String to_S(int tab) {
+    @Override
+    public String toS(int tab) {
         if (statements.isEmpty()) {
             return "(closure)";
         }
