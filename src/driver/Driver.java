@@ -1,7 +1,7 @@
 package driver;
 
 import back_end.Builder;
-import front_end.Function;
+import front_end.FunctionDeclaration;
 import front_end.Parser;
 import front_end.ParsingException;
 import io.Reader;
@@ -15,7 +15,7 @@ public class Driver {
         // front_end
         String input = Reader.use(args[0] + ".grp" ,Reader::read);
         Parser parser = new Parser();
-        List<Function> trees = null;
+        List<FunctionDeclaration> trees = null;
         try {
             trees = parser.parse(input);
         } catch (ParsingException exception) {

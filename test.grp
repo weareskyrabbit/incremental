@@ -4,6 +4,7 @@ Number add(Number a, Number b) {
 Number main() {
     Number m;
     Number n;
+    add(10, 5);
     m = 100;
     n = 50;
     while (1) {

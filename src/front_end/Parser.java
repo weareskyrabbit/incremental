@@ -11,19 +11,19 @@ public class Parser {
     public int line;
     public int offset;
 
-    public List<Function> parse(String input) throws ParsingException {
+    public List<FunctionDeclaration> parse(String input) throws ParsingException {
         this.input = input;
         this.current = null;
-        this.line = 0;
-        this.offset = 0;
-        final List<Function> functions = new ArrayList<>();
+        this.line = 1;
+        this.offset = 1;
+        final List<FunctionDeclaration> function_declarations = new ArrayList<>();
         while (match("Number")) {
-            Function function = function_declaration();
-            functions.add(function);
+            FunctionDeclaration function_declaration = function_declaration();
+            function_declarations.add(function_declaration);
         }
-        return functions;
+        return function_declarations;
     }
-    private Function function_declaration() throws ParsingException {
+    private FunctionDeclaration function_declaration() throws ParsingException {
         SymbolList symbols = new SymbolList(current);
         current = symbols;
         type();
@@ -43,7 +43,7 @@ public class Parser {
         consume(')');
         Closure closure = closure();
         current = current.enclosing;
-        return new Function(name, symbols, closure);
+        return new FunctionDeclaration(name, symbols, closure);
     }
     private Closure closure() throws ParsingException {
         SymbolList symbols = new SymbolList(current);
@@ -89,10 +89,27 @@ public class Parser {
             return new Return(operand);
         } else {
             String name = identifier();
-            consume('=');
-            int value = integer();
-            consume(';');
-            return new Assignment(current.get(name), value);
+            if (match('=')) {
+                consume('=');
+                int value = integer();
+                consume(';');
+                return new Assignment(current.get(name), value);
+            } else {
+                consume('(');
+                List<Integer> arguments = new ArrayList<>();
+                if (!match(')')) {
+                    int argument = integer();
+                    arguments.add(argument);
+                    while (match(',')) {
+                        consume(',');
+                        argument = integer();
+                        arguments.add(argument);
+                    }
+                }
+                consume(')');
+                consume(';');
+                return new FunctionCall(name, arguments);
+            }
         }
     }
     private boolean match(final String token) {
@@ -207,7 +224,7 @@ public class Parser {
         for (char head : array) {
             if (head == '\n') {
                 line++;
-                offset = 0;
+                offset = 1;
                 length++;
             } else if (Character.isWhitespace(head)) {
                 length++;

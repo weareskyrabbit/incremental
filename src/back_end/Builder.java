@@ -1,11 +1,11 @@
 package back_end;
 
-import front_end.Function;
+import front_end.FunctionDeclaration;
 
 import java.util.List;
 
 public class Builder {
-    public String build(final List<Function> tree) {
+    public String build(final List<FunctionDeclaration> tree) {
         final StringBuilder assembly = new StringBuilder(".intel_syntax noprefix\n");
         tree.forEach(method -> assembly.append(method.build()));
         return assembly.toString();

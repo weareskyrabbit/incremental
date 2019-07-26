@@ -2,11 +2,11 @@ package front_end;
 
 import static front_end.Parser.tab;
 
-public class Function implements Node {
+public class FunctionDeclaration implements Node {
     final String name;
     final SymbolList arguments;
     final Closure closure;
-    Function(final String name, final SymbolList arguments, final Closure closure) {
+    FunctionDeclaration(final String name, final SymbolList arguments, final Closure closure) {
         this.name = name;
         this.arguments = arguments;
         this.closure = closure;
