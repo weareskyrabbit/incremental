@@ -1,7 +1,7 @@
 package driver;
 
 import back_end.Builder;
-import front_end.FunctionDeclaration;
+import front_end.ast.FunctionDeclaration;
 import front_end.Parser;
 import front_end.ParsingException;
 import io.Reader;

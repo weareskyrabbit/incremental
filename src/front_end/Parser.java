@@ -1,8 +1,8 @@
 package front_end;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import front_end.ast.*;
+
+import java.util.*;
 
 public class Parser {
     private String input;
@@ -10,12 +10,27 @@ public class Parser {
     private SymbolList current;
     /* private Node pointer; */
     public int line;
+    private Map<String, Word> words;
 
-    public List<FunctionDeclaration> parse(String input) throws ParsingException {
+    public List<FunctionDeclaration> parse(final String input) throws ParsingException {
         this.input = input;
-        state = ParsingState.STANDARD;
+        this.state = ParsingState.STANDARD;
         this.current = null;
         this.line = 1;
+        this.words = new HashMap<>();
+        reserve(new Word("if",    Tag.IF));
+        reserve(new Word("else",  Tag.ELSE));
+        reserve(new Word("while", Tag.WHILE));
+        reserve(new Word("do",    Tag.DO));
+        reserve(new Word("break", Tag.BREAK));
+        reserve(Word.True);
+        reserve(Word.False);
+        reserve(Type.Int);
+        reserve(Type.Float);
+        reserve(Type.Byte);
+        reserve(Type.Boolean);
+        reserve(Type.Character);
+
         final List<FunctionDeclaration> function_declarations = new ArrayList<>();
         while (match("Number")) {
             FunctionDeclaration function_declaration = function_declaration();
@@ -30,14 +45,10 @@ public class Parser {
         String name = identifier();
         consume('(');
         if (!match(')')) {
-            type();
-            String argument = identifier();
-            current.declare(argument);
+            variable_declaration();
             while (match(',')) {
                 consume(',');
-                type();
-                argument = identifier();
-                current.declare(argument);
+                variable_declaration();
             }
         }
         consume(')');
@@ -50,7 +61,8 @@ public class Parser {
         current = symbols;
         consume('{');
         while (match("Number")) {
-            declaration();
+            variable_declaration();
+            consume(';');
         }
         List<Statement> statements = new ArrayList<>();
         while (!match('}')) {
@@ -61,10 +73,9 @@ public class Parser {
         current = current.enclosing;
         return new Closure(symbols, statements);
     }
-    private void declaration() throws ParsingException {
+    private void variable_declaration() throws ParsingException {
         type();
         String name = identifier();
-        consume(';');
         current.declare(name);
     }
     private Statement statement() throws ParsingException {
@@ -106,6 +117,7 @@ public class Parser {
                         arguments.add(argument);
                     }
                 }
+                // TODO check if function call has correct number of arguments
                 consume(')');
                 consume(';');
                 return new FunctionCall(name, arguments);
@@ -136,19 +148,19 @@ public class Parser {
     }
     private UnaryOperator minus() throws ParsingException {
         /*
-        consume('-');
-
-        return new UnaryOperator();
-        */
+         * consume('-');
+         *
+         * return new UnaryOperator();
+         */
         return null;
     }
     private BinaryOperator add() throws ParsingException {
         /*
-         left = integer();
-        consume('+');
-        int right = integer();
-        return BinaryOperator()
-        */
+         * left = integer();
+         * consume('+');
+         * int right = integer();
+         * return BinaryOperator()
+         */
         return null;
     }
     private BinaryOperator multiply() {
@@ -279,6 +291,88 @@ public class Parser {
             }
         }
         input = input.substring(length);
+    }
+    private int offset = 0;
+    private char peek;
+    private void reserve(final Word word) {
+        words.put(word.lexeme, word);
+    }
+    private Token tokenize() {
+        while (Character.isWhitespace(peek)) {
+            if (peek == '\n') {
+                line++;
+            }
+            consume();
+        }
+        switch (peek) {
+            case '&':
+                consume();
+                if (peek == '&') {
+                    consume();
+                    return Word.and; // &&
+                } else {
+                    return new Token('&');
+                }
+            case '|':
+                consume();
+                if (peek == '|') return Word.or; // ||
+                else return new Token('|');
+            case '=':
+                consume();
+                if (peek == '=') return Word.eq; // ==
+                else return new Token('=');
+            case '!':
+                consume();
+                if (peek =='=') return Word.ne; // !=
+                else return new Token('!');
+            case '<':
+                consume();
+                if (peek == '=') return Word.le; // <=
+                else return new Token('<');
+            case '>':
+                consume();
+                if (peek == '=') return Word.ge; // >=
+                else return new Token('>');
+        }
+        if (Character.isDigit(peek)) {
+            int int_value = 0;
+            do {
+                int_value = 10 * int_value + Character.digit(peek, 10);
+                consume();
+            } while (Character.isDigit(peek));
+            if (peek != '.') return new Num(int_value);
+
+            float float_value = int_value;
+            for (int i = 0; ; i++) {
+                consume();
+                if (!Character.isDigit(peek)) break;
+                float_value += Character.digit(peek, 10) / Math.pow(10, i + 1);
+            }
+            return new Real(float_value);
+        } else if (Character.isLetter(peek)) {
+            StringBuilder builder = new StringBuilder();
+            do {
+                builder.append(peek);
+                consume();
+            } while (Character.isLetterOrDigit(peek));
+            String lexeme = builder.toString();
+            if (words.containsKey(lexeme)) return words.get(lexeme);
+            Word word = new Word(lexeme, Tag.ID);
+            words.put(lexeme, word);
+            return word;
+        } else {
+            Token token = new Token(peek);
+            peek = ' ';
+            return token;
+        }
+    }
+    private void consume() {
+        offset++;
+        if (offset >= input.length()) {
+            System.out.println("EOF");
+            System.exit(1);
+        }
+        peek = input.charAt(offset);
     }
     public static String tab(int tab) {
         StringBuilder builder = new StringBuilder();

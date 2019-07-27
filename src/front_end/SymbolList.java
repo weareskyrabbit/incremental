@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class SymbolList {
     final SymbolList enclosing;
-    final Map<String, LocalVariable> symbols;
+    public final Map<String, LocalVariable> symbols;
     private int size;
     SymbolList(final SymbolList enclosing) {
         this.enclosing = enclosing;

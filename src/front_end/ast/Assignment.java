@@ -1,9 +1,11 @@
-package front_end;
+package front_end.ast;
+
+import front_end.LocalVariable;
 
 public class Assignment implements Statement {
-    final LocalVariable variable;
-    final int value;
-    Assignment(final LocalVariable variable, final int value) {
+    private final LocalVariable variable;
+    private final int value;
+    public Assignment(final LocalVariable variable, final int value) {
         this.variable = variable;
         this.value = value;
     }

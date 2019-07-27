@@ -1,4 +1,4 @@
-package front_end;
+package front_end.ast;
 
 public interface Statement extends Node {
     @Override

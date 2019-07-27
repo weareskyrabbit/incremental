@@ -1,10 +1,10 @@
-package front_end;
+package front_end.ast;
 
 import back_end.Builder;
 
 public class Return implements Statement {
     private final int operand; // TODO implement Expression
-    Return(final int operand) {
+    public Return(final int operand) {
         this.operand = operand;
     }
     @Override

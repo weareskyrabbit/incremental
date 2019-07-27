@@ -1,8 +1,8 @@
-package front_end;
+package front_end.ast;
 
 public class UnaryOperator implements Node {
-    final int operand;
-    UnaryOperator(final int operand) {
+    private final int operand;
+    public UnaryOperator(final int operand) {
         this.operand = operand;
     }
     @Override

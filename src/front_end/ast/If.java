@@ -1,12 +1,12 @@
-package front_end;
+package front_end.ast;
 
 import static front_end.Parser.tab;
 
 public class If implements Statement {
-    final int condition;
-    final Closure then_closure;
+    private final int condition;
+    private final Closure then_closure;
     private static int count;
-    If (final int condition, final Closure then_closure) {
+    public If (final int condition, final Closure then_closure) {
         this.condition = condition;
         this.then_closure = then_closure;
     }

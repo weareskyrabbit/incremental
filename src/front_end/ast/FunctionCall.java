@@ -1,12 +1,12 @@
-package front_end;
+package front_end.ast;
 
 import java.util.List;
 
 public class FunctionCall implements Statement {
-    final String name;
-    final List<Integer> arguments;
-    static final String[] registers = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
-    FunctionCall(final String name, final List<Integer> arguments) {
+    private final String name;
+    private final List<Integer> arguments;
+    private static final String[] registers = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
+    public FunctionCall(final String name, final List<Integer> arguments) {
         this.name = name;
         if (arguments.size() > 4) {
             System.out.println("function, `" + name + "` call has too many arguments");

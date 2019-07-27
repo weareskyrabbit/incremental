@@ -1,12 +1,14 @@
-package front_end;
+package front_end.ast;
+
+import front_end.SymbolList;
 
 import static front_end.Parser.tab;
 
 public class FunctionDeclaration implements Node {
-    final String name;
-    final SymbolList arguments;
-    final Closure closure;
-    FunctionDeclaration(final String name, final SymbolList arguments, final Closure closure) {
+    private final String name;
+    private final SymbolList arguments;
+    private final Closure closure;
+    public FunctionDeclaration(final String name, final SymbolList arguments, final Closure closure) {
         this.name = name;
         this.arguments = arguments;
         this.closure = closure;

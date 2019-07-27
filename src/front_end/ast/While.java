@@ -1,12 +1,12 @@
-package front_end;
+package front_end.ast;
 
 import static front_end.Parser.tab;
 
 public class While implements Statement {
-    final int condition;
-    final Closure closure;
+    private final int condition;
+    private final Closure closure;
     private static int count;
-    While(final int condition, final Closure closure) {
+    public While(final int condition, final Closure closure) {
         this.condition = condition;
         this.closure = closure;
     }
