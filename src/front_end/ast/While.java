@@ -3,10 +3,10 @@ package front_end.ast;
 import static front_end.Parser.tab;
 
 public class While implements Statement {
-    private final int condition;
+    private final Expression condition;
     private final Closure closure;
     private static int count;
-    public While(final int condition, final Closure closure) {
+    public While(final Expression condition, final Closure closure) {
         this.condition = condition;
         this.closure = closure;
     }
@@ -15,9 +15,7 @@ public class While implements Statement {
         String assembly = ".Lwhilebegin" +
                 count +
                 ":\n" +
-                "  mov  rax, " +
-                condition +
-                '\n' +
+                condition.build() +
                 "  cmp  rax, 0\n" +
                 "  je   .Lend" +
                 count +
@@ -34,10 +32,10 @@ public class While implements Statement {
     }
     public String toS(int tab) {
         StringBuilder s = new StringBuilder();
-        s.append("(while ")
-                .append(condition)
-                .append('\n');
         tab += 7;
+        s.append("(while ")
+                .append(condition.toS(tab))
+                .append('\n');
         s.append(tab(tab))
                 .append(closure.toS(tab))
                 .append(')');

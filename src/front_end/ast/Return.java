@@ -3,19 +3,18 @@ package front_end.ast;
 import back_end.Builder;
 
 public class Return implements Statement {
-    private final int operand; // TODO implement Expression
-    public Return(final int operand) {
-        this.operand = operand;
+    private final Expression expression; // TODO implement Expression
+    public Return(final Expression expression) {
+        this.expression = expression;
     }
     @Override
     public String build() {
-        return "  mov  rax, " +
-                operand +
-                "\n" +
+        return expression.build() +
                 Builder.epilogue();
     }
     @Override
     public String toS(int tab) {
-        return "(return " + operand + ")";
+        tab += 8;
+        return "(return " + expression.toS(tab) + ")";
     }
 }

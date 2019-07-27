@@ -1,6 +1,7 @@
 package front_end;
 
 import front_end.ast.*;
+import front_end.ast.Number;
 
 import java.util.*;
 
@@ -82,46 +83,33 @@ public class Parser {
         if (match("if")) {
             consume("if");
             consume('(');
-            int condition = integer();
+            Expression condition = expression();
             consume(')');
             Closure then_closure = closure();
             return new If(condition, then_closure);
         } else if (match("while")) {
             consume("while");
             consume('(');
-            int condition = integer();
+            Expression condition = expression();
             consume(')');
             Closure closure = closure();
             return new While(condition, closure);
         } else if (match("return")) {
             consume("return");
-            int operand = integer();
+            Expression expression = expression();
             consume(";");
-            return new Return(operand);
+            return new Return(expression);
+        } else if (match("print")) {
+            consume("print");
+            Expression expression = expression();
+            consume(";");
+            return new Print(expression);
         } else {
             String name = identifier();
-            if (match('=')) {
-                consume('=');
-                int value = integer();
-                consume(';');
-                return new Assignment(current.get(name), value);
-            } else {
-                consume('(');
-                List<Integer> arguments = new ArrayList<>();
-                if (!match(')')) {
-                    int argument = integer();
-                    arguments.add(argument);
-                    while (match(',')) {
-                        consume(',');
-                        argument = integer();
-                        arguments.add(argument);
-                    }
-                }
-                // TODO check if function call has correct number of arguments
-                consume(')');
-                consume(';');
-                return new FunctionCall(name, arguments);
-            }
+            consume('=');
+            Expression expression = expression();
+            consume(';');
+            return new Assignment(new VariableCall(current.get(name)), expression);
         }
     }
     private boolean match(final String token) {
@@ -146,41 +134,73 @@ public class Parser {
             throw new ParsingException();
         }
     }
-    private UnaryOperator minus() throws ParsingException {
-        /*
-         * consume('-');
-         *
-         * return new UnaryOperator();
-         */
-        return null;
+    private Expression expression() throws ParsingException {
+        Expression left = term();
+        if (match('*')) {
+            consume('*');
+            Expression right = term();
+            return new BinaryOperator("*", left, right);
+        } else if (match('/')) {
+            consume('/');
+            Expression right = term();
+            return new BinaryOperator("/", left, right);
+        } else {
+            return left;
+        }
     }
-    private BinaryOperator add() throws ParsingException {
-        /*
-         * left = integer();
-         * consume('+');
-         * int right = integer();
-         * return BinaryOperator()
-         */
-        return null;
+    private Expression term() throws ParsingException {
+        Expression left = unary();
+        if (match('+')) {
+            consume('+');
+            Expression right = unary();
+            return new BinaryOperator("+", left, right);
+        } else if (match('-')) {
+            consume('-');
+            Expression right = unary();
+            return new BinaryOperator("-", left, right);
+        } else {
+            return left;
+        }
     }
-    private BinaryOperator multiply() {
-        return null;
+    private Expression unary() throws ParsingException {
+        if (match('-')) {
+            consume('-');
+            Expression operand = factor();
+            return new UnaryOperator("-", operand);
+        } else {
+            Expression expression = factor();
+            return expression;
+        }
     }
-    private void term() throws ParsingException {
-        // TODO replace it with look-ahead
+    private Expression factor() throws ParsingException {
         char head = input.charAt(0);
         if (Character.isDigit(head)) {
-            integer();
+            final int value = integer();
+            return new Number(value);
         } else if (Character.isLetter(head)) {
-            identifier();
+            final String name = identifier();
             if (match('(')) {
                 consume('(');
+                final List<Expression> arguments = new ArrayList<>();
+                if (!match(')')) {
+                    Expression expression = expression();
+                    arguments.add(expression);
+                    while (match(',')) {
+                        consume(',');
+                        expression = expression();
+                        arguments.add(expression);
+                    }
+                }
                 consume(')');
+                return new FunctionCall(name, arguments);
+            } else {
+                return new VariableCall(current.get(name));
             }
         } else {
             consume('(');
-            /* expression(); */
+            Expression expression = expression();
             consume(')');
+            return expression;
         }
     }
     private void type() throws ParsingException {
@@ -375,6 +395,7 @@ public class Parser {
         peek = input.charAt(offset);
     }
     public static String tab(int tab) {
+        // TODO improve tab system
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < tab; i++) {
             builder.append(' ');

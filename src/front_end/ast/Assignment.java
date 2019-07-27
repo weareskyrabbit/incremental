@@ -1,26 +1,27 @@
 package front_end.ast;
 
-import front_end.LocalVariable;
-
 public class Assignment implements Statement {
-    private final LocalVariable variable;
-    private final int value;
-    public Assignment(final LocalVariable variable, final int value) {
+    private final VariableCall variable;
+    private final Expression expression;
+    public Assignment(final VariableCall variable, final Expression expression) {
         this.variable = variable;
-        this.value = value;
+        this.expression = expression;
     }
     @Override
     public String build() {
-        return "  mov  rax, rbp\n" +
-                "  sub  rax, " +
-                variable.offset +
-                "\n" +
-                "  mov  [rax], " +
-                value +
-                "\n";
+        return variable.build() +
+                expression.build() +
+                "  pop  rdi\n" +
+                "  pop  rax\n" +
+                "  mov  [rax], rdi\n";
     }
     @Override
     public String toS(int tab) {
-        return "(assign " + variable.name + " " + value + ")";
+        tab += 8;
+        return "(assign " +
+                variable.toS(tab) +
+                "\n" +
+                expression.toS(tab) +
+                ")";
     }
 }

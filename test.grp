@@ -1,19 +1,20 @@
 // short comment
 /* long comment */
-Number add(Number a, Number b) {
-    return 0;
+Number factorial(Number n) {
+    if (n) {
+        return n * factorial(n - 1);
+    }
+    return 1;
 }
 Number main() {
-    Number m;
-    Number n;
-    add(10, 5);
-    m = 100;
-    n = 50;
-    while (1) {
-        Number m;
-        if (0) {
-            m = 50;
-        }
+    Number a;
+    Number b;
+    a = 2;
+    b = 4;
+    while (b) {
+        a = 6;
+        print factorial(a);
+        b = b - 1;
     }
     return 0;
 }
