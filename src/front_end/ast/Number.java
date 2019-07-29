@@ -6,11 +6,15 @@ public class Number implements Expression {
         this.value = value;
     }
     @Override
+    public String toIR() {
+        return "" + value;
+    }
+    @Override
     public String build() {
         return "  push " + value + "\n";
     }
     @Override
     public String toS(int tab) {
-        return "" +value;
+        return "" + value;
     }
 }

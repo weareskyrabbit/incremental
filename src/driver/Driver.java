@@ -31,6 +31,9 @@ public class Driver {
         StringBuilder s = new StringBuilder();
         trees.forEach(tree -> s.append(tree.toS(0)).append('\n'));
         Writer.use(args[0] + ".ast", writer -> writer.write(s.toString()));
+        StringBuilder ir = new StringBuilder();
+        trees.forEach(tree -> ir.append(tree.toIR()).append('\n'));
+        Writer.use(args[0] + ".ir", writer -> writer.write(ir.toString()));
         // back_end
         String output = new Builder().build(trees);
         Writer.use(args[0] + ".s", writer -> writer.write(output));

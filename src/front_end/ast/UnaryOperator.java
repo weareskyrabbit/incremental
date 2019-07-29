@@ -3,9 +3,18 @@ package front_end.ast;
 public class UnaryOperator implements Expression {
     private final String operator;
     private final Expression operand;
+    private static int count = 0;
     public UnaryOperator(final String operator, final Expression operand) {
         this.operator = operator;
         this.operand = operand;
+    }
+    @Override
+    public String toIR() {
+        count++;
+        if (operator.equals("-")) {
+            return "u" + count + " = " + 0 + " " + operator + " " + operand.toIR();
+        }
+        return null;
     }
     @Override
     public String build() {

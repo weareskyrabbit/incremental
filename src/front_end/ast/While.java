@@ -1,18 +1,20 @@
 package front_end.ast;
 
-import static front_end.Parser.tab;
-
 public class While implements Statement {
     private final Expression condition;
     private final Closure closure;
-    private static int count;
+    private static int count = 0;
     public While(final Expression condition, final Closure closure) {
         this.condition = condition;
         this.closure = closure;
     }
     @Override
+    public String toIR() {
+        return "while (" + condition.toIR() + ") " + closure.toIR();
+    }
+    @Override
     public String build() {
-        String assembly = ".Lwhilebegin" +
+        final String assembly = ".Lwhilebegin" +
                 count +
                 ":\n" +
                 condition.build() +
@@ -31,14 +33,15 @@ public class While implements Statement {
         return assembly;
     }
     public String toS(int tab) {
-        StringBuilder s = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         tab += 7;
-        s.append("(while ")
-                .append(condition.toS(tab))
-                .append('\n');
-        s.append(tab(tab))
+        final String s = condition.toS(tab);
+        tab += 1 + s.length();
+        builder.append("(while ")
+                .append(s)
+                .append(' ')
                 .append(closure.toS(tab))
                 .append(')');
-        return s.toString();
+        return builder.toString();
     }
 }

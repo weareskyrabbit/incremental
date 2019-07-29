@@ -8,6 +8,10 @@ public class Return implements Statement {
         this.expression = expression;
     }
     @Override
+    public String toIR() {
+        return "return " + expression.toIR();
+    }
+    @Override
     public String build() {
         return expression.build() +
                 Builder.epilogue();

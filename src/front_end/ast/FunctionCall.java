@@ -1,6 +1,9 @@
 package front_end.ast;
 
+import java.util.Iterator;
 import java.util.List;
+
+import static front_end.Parser.tab;
 
 public class FunctionCall implements Expression {
     private final String name;
@@ -13,6 +16,22 @@ public class FunctionCall implements Expression {
             System.exit(1);
         }
         this.arguments = arguments;
+    }
+    @Override
+    public String toIR() {
+        final StringBuilder ir = new StringBuilder();
+        ir.append(name)
+                .append('(');
+        for(Iterator<Expression> iterator = arguments.iterator();;) {
+            Expression element = iterator.next();
+            ir.append(element.toIR());
+            if (!iterator.hasNext()) {
+                break;
+            }
+            ir.append(", ");
+        }
+        ir.append(')');
+        return ir.toString();
     }
     @Override
     public String build() {
@@ -32,6 +51,27 @@ public class FunctionCall implements Expression {
 
     @Override
     public String toS(int tab) {
-        return "";
+        tab += 2 + name.length();
+        final StringBuilder builder = new StringBuilder();
+        builder.append('(')
+                .append(name);
+        if (arguments.size() == 0) {
+            builder.append(')');
+            return builder.toString();
+        }
+        builder.append(' ');
+
+
+        for(Iterator<Expression> iterator = arguments.iterator();;) {
+            Expression element = iterator.next();
+            builder.append(element.toS(tab));
+            if (!iterator.hasNext()) {
+                break;
+            }
+            builder.append('\n')
+                    .append(tab(tab));
+        }
+        builder.append(')');
+        return builder.toString();
     }
 }

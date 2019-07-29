@@ -1,6 +1,9 @@
 package front_end.ast;
 
+import front_end.LocalVariable;
 import front_end.SymbolList;
+
+import java.util.Iterator;
 
 import static front_end.Parser.tab;
 
@@ -13,23 +16,54 @@ public class FunctionDeclaration implements Node {
         this.arguments = arguments;
         this.closure = closure;
     }
-    public String toS(int tab) {
-        StringBuilder s = new StringBuilder();
-        s.append(tab(tab))
-                .append("(declare ")
+    @Override
+    public String toIR() {
+        final StringBuilder ir = new StringBuilder();
+        ir.append("Number ")
                 .append(name)
-                .append('\n');
-        tab += 9;
-        s.append(tab(tab))
-                .append(closure.toS(tab))
-                .append(')');
-        return s.toString();
+                .append('(');
+        if (arguments.symbols.size() > 0) {
+            for (Iterator<LocalVariable> iterator = arguments.symbols.values().iterator(); ; ) {
+                LocalVariable element = iterator.next();
+                ir.append("Number ")
+                        .append(element.name);
+                if (!iterator.hasNext()) {
+                    break;
+                }
+                ir.append(", ");
+            }
+        }
+        ir.append(')')
+                .append(closure.toIR());
+        return ir.toString();
     }
-
     @Override
     public String build() {
         return ".global " + name + "\n" +
                 name + ":\n" +
                 closure.build();
+    }
+    public String toS(int tab) {
+        tab += 9;
+        StringBuilder builder = new StringBuilder();
+        builder.append("(declare ")
+                .append(name)
+                .append(' ')
+                .append('[');
+        if (arguments.symbols.size() > 0) {
+            for (Iterator<LocalVariable> iterator = arguments.symbols.values().iterator(); ; ) {
+                LocalVariable element = iterator.next();
+                builder.append(element.name);
+                if (!iterator.hasNext()) {
+                    break;
+                }
+                builder.append(' ');
+            }
+        }
+        builder.append("]\n")
+                .append(tab(tab))
+                .append(closure.toS(tab))
+                .append(')');
+        return builder.toString();
     }
 }

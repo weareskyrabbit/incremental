@@ -1,6 +1,7 @@
 package front_end.ast;
 
 import back_end.Builder;
+import front_end.LocalVariable;
 import front_end.SymbolList;
 
 import java.util.Iterator;
@@ -16,8 +17,37 @@ public class Closure implements Node {
         this.statements = statements;
     }
     @Override
+    public String toIR() {
+        if (statements.isEmpty()) {
+            return "{}";
+        }
+        final StringBuilder ir = new StringBuilder();
+        ir.append('[');
+        if (symbols.symbols.size() > 0) {
+            for (Iterator<LocalVariable> iterator = symbols.symbols.values().iterator(); ; ) {
+                LocalVariable element = iterator.next();
+                ir.append(element.name);
+                if (!iterator.hasNext()) {
+                    break;
+                }
+                ir.append(' ');
+            }
+        }
+        ir.append("] {\n");
+        for(Iterator<Statement> iterator = statements.iterator(); ; ) {
+            Statement element = iterator.next();
+            ir.append(element.toIR());
+            if (!iterator.hasNext()) {
+                break;
+            }
+            ir.append('\n');
+        }
+        ir.append('}');
+        return ir.toString();
+    }
+    @Override
     public String build() {
-        StringBuilder assembly = new StringBuilder();
+        final StringBuilder assembly = new StringBuilder();
         assembly.append(Builder.prologue(symbols.symbols.size() * 8));
         statements.forEach(statement -> assembly.append(statement.build()));
         return assembly.toString();
@@ -27,18 +57,32 @@ public class Closure implements Node {
         if (statements.isEmpty()) {
             return "(closure)";
         }
-        StringBuilder s = new StringBuilder();
-        s.append("(closure ");
+        final StringBuilder builder = new StringBuilder();
         tab += 9;
-        for(Iterator<Statement> iterator = statements.iterator();;) {
+        builder.append("(closure ")
+                .append('[');
+        if (symbols.symbols.size() > 0) {
+            for (Iterator<LocalVariable> iterator = symbols.symbols.values().iterator(); ; ) {
+                LocalVariable element = iterator.next();
+                builder.append(element.name);
+                if (!iterator.hasNext()) {
+                    break;
+                }
+                builder.append(' ');
+            }
+        }
+        builder.append("]\n")
+                .append(tab(tab));
+        for(Iterator<Statement> iterator = statements.iterator(); ; ) {
             Statement element = iterator.next();
-            s.append(element.toS(tab));
+            builder.append(element.toS(tab));
             if (!iterator.hasNext()) {
                 break;
             }
-            s.append('\n')
+            builder.append('\n')
                     .append(tab(tab));
         }
-        return s.append(')').toString();
+        builder.append(')');
+        return builder.toString();
     }
 }

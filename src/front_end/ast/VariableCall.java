@@ -4,9 +4,11 @@ import front_end.LocalVariable;
 
 public class VariableCall implements Expression {
     private final LocalVariable local;
-
     public VariableCall(final LocalVariable local) {
         this.local = local;
+    }
+    public String toIR() {
+        return local.name;
     }
     @Override
     public String build() {

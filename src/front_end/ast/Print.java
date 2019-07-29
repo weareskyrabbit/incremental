@@ -6,6 +6,10 @@ public class Print implements Statement {
         this.expression = expression;
     }
     @Override
+    public String toIR() {
+        return "print " + expression.toIR();
+    }
+    @Override
     public String build() {
         return expression.build() + "  out  rax\n";
     }

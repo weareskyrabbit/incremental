@@ -1,25 +1,16 @@
 package front_end.ast;
 
-import static front_end.Parser.tab;
-
 public class If implements Statement {
     private final Expression condition;
     private final Closure then_closure;
-    private static int count;
+    private static int count = 0;
     public If (final Expression condition, final Closure then_closure) {
         this.condition = condition;
         this.then_closure = then_closure;
     }
-    public String toS(int tab) {
-        StringBuilder s = new StringBuilder();
-        tab += 4;
-        s.append("(if ")
-                .append(condition.toS(tab))
-                .append('\n');
-        s.append(tab(tab))
-                .append(then_closure.toS(tab))
-                .append(')');
-        return s.toString();
+    @Override
+    public String toIR() {
+        return "if (" + condition.toIR() + ") " + then_closure.toIR();
     }
     @Override
     public String build() {
@@ -32,5 +23,18 @@ public class If implements Statement {
                 then_closure.build() +
                 ".Lifend:\n";
 
+    }
+    @Override
+    public String toS(int tab) {
+        final StringBuilder builder = new StringBuilder();
+        tab += 4;
+        final String s = condition.toS(tab);
+        tab += 1 + s.length();
+        builder.append("(if ")
+                .append(s)
+                .append(' ')
+                .append(then_closure.toS(tab))
+                .append(')');
+        return builder.toString();
     }
 }
