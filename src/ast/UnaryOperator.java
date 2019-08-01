@@ -1,20 +1,15 @@
-package front_end.ast;
+package ast;
 
-public class UnaryOperator implements Expression {
-    private final String operator;
+public class UnaryOperator extends Operator {
     private final Expression operand;
     private static int count = 0;
     public UnaryOperator(final String operator, final Expression operand) {
-        this.operator = operator;
+        super(operator);
         this.operand = operand;
     }
     @Override
-    public String toIR() {
-        count++;
-        if (operator.equals("-")) {
-            return "u" + count + " = " + 0 + " " + operator + " " + operand.toIR();
-        }
-        return null;
+    public Expression generate() {
+        return new UnaryOperator(operator, operand.reduce());
     }
     @Override
     public String build() {
@@ -31,5 +26,9 @@ public class UnaryOperator implements Expression {
     public String toS(int tab) {
         tab += 2 + operator.length();
         return "(" + operator + " " + operand.toS(tab) + ")";
+    }
+    @Override
+    public String toString() {
+        return operator + " " + operand.toString();
     }
 }

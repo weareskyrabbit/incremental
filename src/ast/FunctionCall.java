@@ -1,37 +1,21 @@
-package front_end.ast;
+package ast;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import static front_end.Parser.tab;
 
-public class FunctionCall implements Expression {
-    private final String name;
+public class FunctionCall extends Operator {
     private final List<Expression> arguments;
     private static final String[] registers = {"rdi", "rsi", "rdx", "rcx", "r8", "r9"};
     public FunctionCall(final String name, final List<Expression> arguments) {
-        this.name = name;
+        super(name);
         if (arguments.size() > 4) {
             System.out.println("function, `" + name + "` call has too many arguments");
             System.exit(1);
         }
         this.arguments = arguments;
-    }
-    @Override
-    public String toIR() {
-        final StringBuilder ir = new StringBuilder();
-        ir.append(name)
-                .append('(');
-        for(Iterator<Expression> iterator = arguments.iterator();;) {
-            Expression element = iterator.next();
-            ir.append(element.toIR());
-            if (!iterator.hasNext()) {
-                break;
-            }
-            ir.append(", ");
-        }
-        ir.append(')');
-        return ir.toString();
     }
     @Override
     public String build() {
@@ -44,17 +28,17 @@ public class FunctionCall implements Expression {
                     .append(", rax\n");
         }
         assembly.append("  call ")
-                .append(name)
+                .append(operator)
                 .append('\n');
         return assembly.toString();
     }
 
     @Override
     public String toS(int tab) {
-        tab += 2 + name.length();
+        tab += 2 + operator.length();
         final StringBuilder builder = new StringBuilder();
         builder.append('(')
-                .append(name);
+                .append(operator);
         if (arguments.size() == 0) {
             builder.append(')');
             return builder.toString();
@@ -73,5 +57,30 @@ public class FunctionCall implements Expression {
         }
         builder.append(')');
         return builder.toString();
+    }
+    @Override
+    public String toString() {
+        final StringBuilder ir = new StringBuilder();
+        final List<Expression> temporaries = new ArrayList<>();
+        for(Iterator<Expression> iterator = arguments.iterator();;) {
+            Expression element = iterator.next();
+            Expression temporary = element.reduce();
+            temporaries.add(temporary);
+            if (!iterator.hasNext()) {
+                break;
+            }
+        }
+        ir.append(operator)
+                .append('(');
+        for(Iterator<Expression> iterator = temporaries.iterator();;) {
+            Expression element = iterator.next();
+            ir.append(element.toString());
+            if (!iterator.hasNext()) {
+                break;
+            }
+            ir.append(", ");
+        }
+        ir.append(')');
+        return ir.toString();
     }
 }

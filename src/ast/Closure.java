@@ -1,4 +1,4 @@
-package front_end.ast;
+package ast;
 
 import back_end.Builder;
 import front_end.LocalVariable;
@@ -9,7 +9,8 @@ import java.util.List;
 
 import static front_end.Parser.tab;
 
-public class Closure implements Node {
+public class Closure extends Statement {
+    // TODO replace it with Seq in mGroupy/src/front_end/inter
     private final SymbolList symbols;
     private final List<Statement> statements;
     public Closure(final SymbolList symbols, final List<Statement> statements) {
@@ -17,33 +18,21 @@ public class Closure implements Node {
         this.statements = statements;
     }
     @Override
-    public String toIR() {
+    public void generate(final int before, final int after) {
         if (statements.isEmpty()) {
-            return "{}";
+            return;
         }
-        final StringBuilder ir = new StringBuilder();
-        ir.append('[');
-        if (symbols.symbols.size() > 0) {
-            for (Iterator<LocalVariable> iterator = symbols.symbols.values().iterator(); ; ) {
-                LocalVariable element = iterator.next();
-                ir.append(element.name);
-                if (!iterator.hasNext()) {
-                    break;
-                }
-                ir.append(' ');
-            }
-        }
-        ir.append("] {\n");
+        Sequence head = new Sequence(null);
+        Sequence current = head;
         for(Iterator<Statement> iterator = statements.iterator(); ; ) {
-            Statement element = iterator.next();
-            ir.append(element.toIR());
             if (!iterator.hasNext()) {
                 break;
             }
-            ir.append('\n');
+            Sequence element = new Sequence(iterator.next());
+            current.next = element;
+            current = element;
         }
-        ir.append('}');
-        return ir.toString();
+        head.next.generate(before, after);
     }
     @Override
     public String build() {

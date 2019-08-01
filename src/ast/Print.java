@@ -1,13 +1,16 @@
-package front_end.ast;
+package ast;
 
-public class Print implements Statement {
+import static middle_end.IRGenerator.emit;
+
+public class Print extends Statement {
     private final Expression expression;
     public Print(final Expression expression) {
         this.expression = expression;
     }
     @Override
-    public String toIR() {
-        return "print " + expression.toIR();
+    public void generate(final int before, final int after) {
+        Expression temporary = expression.reduce();
+        emit("print " + temporary.toString());
     }
     @Override
     public String build() {

@@ -1,16 +1,23 @@
-package front_end.ast;
+package ast;
 
-public class If implements Statement {
+import static middle_end.IRGenerator.emit_label;
+import static middle_end.IRGenerator.new_label;
+
+public class If extends Statement {
     private final Expression condition;
     private final Closure then_closure;
+    private /*final*/ Closure else_closure;
     private static int count = 0;
     public If (final Expression condition, final Closure then_closure) {
         this.condition = condition;
         this.then_closure = then_closure;
     }
     @Override
-    public String toIR() {
-        return "if (" + condition.toIR() + ") " + then_closure.toIR();
+    public void generate(final int before, final int after) {
+        final int label = new_label();
+        condition.jumping(0, after);
+        emit_label(label);
+        then_closure.generate(label, after);
     }
     @Override
     public String build() {

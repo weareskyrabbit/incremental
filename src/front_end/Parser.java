@@ -1,7 +1,8 @@
 package front_end;
 
-import front_end.ast.*;
-import front_end.ast.Number;
+import ast.*;
+import ast.Number;
+import front_end.token.*;
 
 import java.util.*;
 

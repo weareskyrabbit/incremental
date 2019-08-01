@@ -1,15 +1,17 @@
-package front_end.ast;
+package ast;
 
 import back_end.Builder;
+import static middle_end.IRGenerator.emit;
 
-public class Return implements Statement {
+public class Return extends Statement {
     private final Expression expression; // TODO implement Expression
     public Return(final Expression expression) {
         this.expression = expression;
     }
     @Override
-    public String toIR() {
-        return "return " + expression.toIR();
+    public void generate(final int before, final int after) {
+        Expression temporary = expression.reduce();
+        emit("return " + temporary.toString());
     }
     @Override
     public String build() {

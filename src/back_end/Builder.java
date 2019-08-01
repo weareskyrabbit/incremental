@@ -1,6 +1,6 @@
 package back_end;
 
-import front_end.ast.FunctionDeclaration;
+import ast.FunctionDeclaration;
 
 import java.util.List;
 

@@ -1,14 +1,12 @@
-package front_end.ast;
+package ast;
 
 import front_end.LocalVariable;
 
-public class VariableCall implements Expression {
+public class VariableCall extends Expression {
     private final LocalVariable local;
     public VariableCall(final LocalVariable local) {
+        super(local.toString());
         this.local = local;
-    }
-    public String toIR() {
-        return local.name;
     }
     @Override
     public String build() {
@@ -21,5 +19,10 @@ public class VariableCall implements Expression {
     @Override
     public String toS(int tab) {
         return local.name;
+    }
+    public String toStringWithUpdate() {
+        local.update();
+        operator = local.toString();
+        return operator;
     }
 }

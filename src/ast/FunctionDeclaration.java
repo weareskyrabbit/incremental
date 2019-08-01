@@ -1,4 +1,4 @@
-package front_end.ast;
+package ast;
 
 import front_end.LocalVariable;
 import front_end.SymbolList;
@@ -6,6 +6,7 @@ import front_end.SymbolList;
 import java.util.Iterator;
 
 import static front_end.Parser.tab;
+import static middle_end.IRGenerator.*;
 
 public class FunctionDeclaration implements Node {
     private final String name;
@@ -16,25 +17,18 @@ public class FunctionDeclaration implements Node {
         this.arguments = arguments;
         this.closure = closure;
     }
-    @Override
-    public String toIR() {
+    public String generate() {
         final StringBuilder ir = new StringBuilder();
-        ir.append("Number ")
+        clear();
+        final int before = new_label();
+        final int after = new_label();
+        emit_label(before);
+        closure.generate(before, after);
+        emit_label(after);
+        ir.append('[')
                 .append(name)
-                .append('(');
-        if (arguments.symbols.size() > 0) {
-            for (Iterator<LocalVariable> iterator = arguments.symbols.values().iterator(); ; ) {
-                LocalVariable element = iterator.next();
-                ir.append("Number ")
-                        .append(element.name);
-                if (!iterator.hasNext()) {
-                    break;
-                }
-                ir.append(", ");
-            }
-        }
-        ir.append(')')
-                .append(closure.toIR());
+                .append("]\n")
+                .append(getIR());
         return ir.toString();
     }
     @Override

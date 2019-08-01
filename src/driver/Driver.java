@@ -1,7 +1,7 @@
 package driver;
 
 import back_end.Builder;
-import front_end.ast.FunctionDeclaration;
+import ast.FunctionDeclaration;
 import front_end.Parser;
 import front_end.ParsingException;
 import io.Reader;
@@ -13,8 +13,8 @@ import java.util.List;
 public class Driver {
     public static void main(String[] args) throws IOException {
         // front_end
-        String input = Reader.use(args[0] + ".grp" ,Reader::read);
-        Parser parser = new Parser();
+        final String input = Reader.use(args[0] + ".grp" ,Reader::read);
+        final Parser parser = new Parser();
         List<FunctionDeclaration> trees = null;
         try {
             trees = parser.parse(input);
@@ -28,14 +28,18 @@ public class Driver {
             */
             System.exit(1);
         }
-        StringBuilder s = new StringBuilder();
-        trees.forEach(tree -> s.append(tree.toS(0)).append('\n'));
-        Writer.use(args[0] + ".ast", writer -> writer.write(s.toString()));
-        StringBuilder ir = new StringBuilder();
-        trees.forEach(tree -> ir.append(tree.toIR()).append('\n'));
+        if (args.length > 1 && args[1].equals("ast")) {
+            final StringBuilder s = new StringBuilder();
+            trees.forEach(tree -> s.append(tree.toS(0)).append('\n'));
+            Writer.use(args[0] + ".ast", writer -> writer.write(s.toString()));
+        }
+        // middle_end
+        final StringBuilder ir = new StringBuilder();
+        ir.append("; tab=8\n");
+        trees.forEach(tree -> ir.append(tree.generate()).append('\n'));
         Writer.use(args[0] + ".ir", writer -> writer.write(ir.toString()));
         // back_end
-        String output = new Builder().build(trees);
+        final String output = new Builder().build(trees);
         Writer.use(args[0] + ".s", writer -> writer.write(output));
     }
 }

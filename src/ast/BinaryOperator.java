@@ -1,21 +1,19 @@
-package front_end.ast;
+package ast;
 
 import static front_end.Parser.tab;
 
-public class BinaryOperator implements Expression {
-    private final String operator;
+public class BinaryOperator extends Operator {
     private final Expression left;
     private final Expression right;
     private static int count;
     public BinaryOperator(final String operator, final Expression left, final Expression right) {
-        this.operator = operator;
+        super(operator);
         this.left = left;
         this.right = right;
     }
     @Override
-    public String toIR() {
-        count++;
-        return "b" + count + " = " + left.toIR() + " " + operator + " " + right.toIR();
+    public Expression generate() {
+        return new BinaryOperator(operator, left.reduce(), right.reduce());
     }
     @Override
     public String build() {
@@ -65,5 +63,9 @@ public class BinaryOperator implements Expression {
         builder.append(s)
                 .append(')');
         return builder.toString();
+    }
+    @Override
+    public String toString() {
+        return left.toString() + " " + operator + " " + right.toString();
     }
 }

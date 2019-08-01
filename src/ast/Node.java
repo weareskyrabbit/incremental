@@ -1,7 +1,6 @@
-package front_end.ast;
+package ast;
 
 public interface Node {
-    String toIR();
     String build();
     String toS(int tab);
 }

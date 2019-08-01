@@ -1,4 +1,4 @@
-package front_end;
+package front_end.token;
 
 public class Token {
     /* member variables */

@@ -1,6 +1,8 @@
-package front_end.ast;
+package ast;
 
-public class While implements Statement {
+import static middle_end.IRGenerator.*;
+
+public class While extends Statement {
     private final Expression condition;
     private final Closure closure;
     private static int count = 0;
@@ -9,8 +11,13 @@ public class While implements Statement {
         this.closure = closure;
     }
     @Override
-    public String toIR() {
-        return "while (" + condition.toIR() + ") " + closure.toIR();
+    public void generate(final int before, int after) {
+        this.after = after;
+        final int label = new_label();
+        condition.jumping(0, after);
+        emit_label(label);
+        closure.generate(label, before);
+        emit("goto L" + before);
     }
     @Override
     public String build() {

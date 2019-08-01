@@ -1,11 +1,13 @@
-package front_end;
+package front_end.token;
 
-public class Real extends Token {
+import front_end.Tag;
+
+public class Num extends Token {
     /* member variables */
-    public final float value;
+    public final int value;
     /* constructors */
-    public Real(float value) {
-        super(Tag.REAL);
+    public Num(int value) {
+        super(Tag.NUM);
         this.value = value;
     }
     /* member functions */

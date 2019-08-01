@@ -1,8 +1,9 @@
-package front_end.ast;
+package ast;
 
 import static front_end.Parser.tab;
+import static middle_end.IRGenerator.emit;
 
-public class Assignment implements Statement {
+public class Assignment extends Statement {
     private final VariableCall variable;
     private final Expression expression;
     public Assignment(final VariableCall variable, final Expression expression) {
@@ -10,8 +11,8 @@ public class Assignment implements Statement {
         this.expression = expression;
     }
     @Override
-    public String toIR() {
-        return variable.toIR() + " = 0 + " + expression.toIR();
+    public void generate(final int before, final int after) {
+        emit(variable.toStringWithUpdate()  + " = " + expression.generate().toString());
     }
     @Override
     public String build() {

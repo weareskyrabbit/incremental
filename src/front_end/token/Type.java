@@ -1,4 +1,6 @@
-package front_end;
+package front_end.token;
+
+import front_end.Tag;
 
 public class Type extends Word {
     /* member variables */
