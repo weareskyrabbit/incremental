@@ -2,22 +2,19 @@ package front_end.token;
 
 import front_end.Tag;
 
+// TODO implement type system
 public class Type extends Word {
-    /* member variables */
     public int width = 0;
-    /* constructors */
     public Type(String lexeme, int tag, int width) {
         super(lexeme, tag);
         this.width = width;
     }
-    /* static variables */
     public static final Type
         Int        = new Type("int",       Tag.BASIC, 4), // TODO rename
         Float      = new Type("float",     Tag.BASIC, 8), // TODO rename
         Byte       = new Type("Byte",      Tag.BASIC, 1), // TODO implement
         Character  = new Type("Character", Tag.BASIC, 1),
         Boolean    = new Type("Boolean",   Tag.BASIC, 1);
-    /* static functions */
     public static boolean numeric(Type type) {
         return type == Type.Character || type == Type.Float || type == Type.Int;
     }

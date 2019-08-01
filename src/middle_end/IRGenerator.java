@@ -7,7 +7,7 @@ public class IRGenerator {
         ir.delete(0, ir.toString().length());
     }
     public static int new_label() {
-        return ++label_count;
+        return label_count++;
     }
     public static void emit_label(final int index) {
         ir.append('L')

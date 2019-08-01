@@ -1,7 +1,6 @@
 package front_end;
 
 public class Tag {
-    /* static variables */
     public static final int
         AND   = 256, BASIC = 257, BREAK = 258, DO   = 259, ELSE  = 260,
         EQ    = 261, FALSE = 262, GE    = 263, ID   = 264, IF    = 265,

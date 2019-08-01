@@ -4,6 +4,7 @@ import ast.FunctionDeclaration;
 
 import java.util.List;
 
+// TODO change build system
 public class Builder {
     public String build(final List<FunctionDeclaration> tree) {
         final StringBuilder assembly = new StringBuilder(".intel_syntax noprefix\n");

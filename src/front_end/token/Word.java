@@ -3,19 +3,15 @@ package front_end.token;
 import front_end.Tag;
 
 public class Word extends Token {
-    /* member variables */
     public String lexeme = "";
-    /* constructors */
     public Word(String lexeme, int tag) {
         super(tag);
         this.lexeme = lexeme;
     }
-    /* member functions */
     @Override
     public String toString() {
         return lexeme;
     }
-    /* static variables */
     public static final Word
         and   = new Word("&&", Tag.AND),      or    = new Word("||", Tag.OR),
         eq    = new Word("==", Tag.EQ),       ne    = new Word("!=", Tag.NE),
