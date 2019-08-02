@@ -18,18 +18,14 @@ public class FunctionDeclaration implements Node {
         this.closure = closure;
     }
     public String generate() {
-        final StringBuilder ir = new StringBuilder();
         clear();
         final int before = new_label();
         final int after = new_label();
+        emit_label(name);
         emit_label(before);
         closure.generate(before, after);
         emit_label(after);
-        ir.append('[')
-                .append(name)
-                .append("]\n")
-                .append(getIR());
-        return ir.toString();
+        return getIR();
     }
     @Override
     public String build() {

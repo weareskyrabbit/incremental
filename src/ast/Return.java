@@ -1,6 +1,8 @@
 package ast;
 
 import back_end.Builder;
+
+import static middle_end.IRGenerator._return;
 import static middle_end.IRGenerator.emit;
 
 public class Return extends Statement {
@@ -12,6 +14,7 @@ public class Return extends Statement {
     public void generate(final int before, final int after) {
         Expression temporary = expression.reduce();
         emit("return " + temporary.toString());
+        _return(temporary.toString());
     }
     @Override
     public String build() {

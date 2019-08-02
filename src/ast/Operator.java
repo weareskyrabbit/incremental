@@ -1,6 +1,7 @@
 package ast;
 
 import static middle_end.IRGenerator.emit;
+import static middle_end.IRGenerator.three_address;
 
 public abstract class Operator extends Expression {
     Operator(final String operator) {
@@ -15,6 +16,7 @@ public abstract class Operator extends Expression {
         final Temporary temporary = new Temporary();
         final Expression expression = generate();
         emit(temporary.toString() + " = " + expression.toString());
+        three_address(temporary.toString(), expression.toString());
         return temporary;
     }
 }

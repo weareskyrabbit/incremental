@@ -18,6 +18,7 @@ public class While extends Statement {
         emit_label(label);
         closure.generate(label, before);
         emit("goto L" + before);
+        _goto(before);
     }
     @Override
     public String build() {

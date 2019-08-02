@@ -1,5 +1,6 @@
 package ast;
 
+import static middle_end.IRGenerator._print;
 import static middle_end.IRGenerator.emit;
 
 public class Print extends Statement {
@@ -11,6 +12,7 @@ public class Print extends Statement {
     public void generate(final int before, final int after) {
         Expression temporary = expression.reduce();
         emit("print " + temporary.toString());
+        _print(temporary.toString());
     }
     @Override
     public String build() {
