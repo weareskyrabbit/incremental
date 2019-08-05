@@ -7,7 +7,7 @@ import front_end.SymbolList;
 import java.util.Iterator;
 import java.util.List;
 
-import static front_end.Parser.tab;
+import static front_end.RecursiveDescentParser.tab;
 
 public class Closure extends Statement {
     // TODO replace it with Seq in mGroupy/src/front_end/inter

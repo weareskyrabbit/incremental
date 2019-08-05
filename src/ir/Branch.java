@@ -32,4 +32,8 @@ public class Branch implements Code {
                 return null;
         }
     }
+    @Override
+    public Code reduce() {
+        return this;
+    }
 }

@@ -1,11 +1,14 @@
 package ast;
 
-import static front_end.Parser.tab;
+import ir.Immediate;
+import ir.Operand;
+import ir.Register;
+
+import static front_end.RecursiveDescentParser.tab;
 
 public class BinaryOperator extends Operator {
     private final Expression left;
     private final Expression right;
-    private static int count;
     public BinaryOperator(final String operator, final Expression left, final Expression right) {
         super(operator);
         this.left = left;
@@ -67,5 +70,21 @@ public class BinaryOperator extends Operator {
     @Override
     public String toString() {
         return left.toString() + " " + operator + " " + right.toString();
+    }
+    Operand left_toOperand() {
+        if (left instanceof Temporary) {
+            return new Register(left.toString());
+        } else if (left instanceof Number) {
+            return new Immediate(((Number)left).value);
+        }
+        return new Register("");
+    }
+    Operand right_toOperand() {
+        if (right instanceof Temporary) {
+            return new Register(right.toString());
+        } else if (right instanceof Number) {
+            return new Immediate(((Number)right).value);
+        }
+        return new Register("");
     }
 }

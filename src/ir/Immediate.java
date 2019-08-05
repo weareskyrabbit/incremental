@@ -1,8 +1,8 @@
 package ir;
 
-public class Number implements Operand {
-    private final int value;
-    Number(final int value) {
+public class Immediate implements Operand {
+    final int value;
+    public Immediate(final int value) {
         this.value = value;
     }
     @Override

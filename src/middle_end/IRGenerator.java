@@ -6,10 +6,11 @@ import ir.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IRGenerator {
     private static final StringBuilder ir = new StringBuilder();
-    private static final List<Code> codes = new ArrayList<>();
+    private static List<Code> codes = new ArrayList<>();
     private static int label_count;
     public static void clear() {
         ir.delete(0, ir.toString().length());
@@ -40,6 +41,13 @@ public class IRGenerator {
                 operator,
                 new Register("")));
     }
+    public static void three_address(final String register, final Operand left, final String operator,
+                                     final Operand right) {
+        codes.add(new ThreeAddress(new Register(register),
+                left,
+                operator,
+                right));
+    }
     public static void _return(final String operand) {
         codes.add(new Return(new Register(operand)));
     }
@@ -62,6 +70,7 @@ public class IRGenerator {
         }
     }
     public static String getIR() {
+        constant_fold();
         final StringBuilder builder = new StringBuilder();
         codes.forEach(builder::append);
         final StringBuilder assembly = new StringBuilder(".intel_syntax noprefix\n");
@@ -70,8 +79,19 @@ public class IRGenerator {
             Writer.use("test.ir2", writer -> writer.write(builder.toString()));
             Writer.use("test.s2", writer -> writer.write(assembly.toString()));
         } catch (IOException exception) {
-
+            System.out.println("IOException");
         }
         return ir.toString();
+    }
+    // optimize
+    private static void constant_fold() {
+        codes = codes.stream()
+                .map(Code::reduce)
+                .collect(Collectors.toList());
+    }
+    private static void register_allocate() {
+
+    }
+    private static void reduce_deadcode() {
     }
 }

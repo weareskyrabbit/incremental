@@ -16,7 +16,14 @@ public abstract class Operator extends Expression {
         final Temporary temporary = new Temporary();
         final Expression expression = generate();
         emit(temporary.toString() + " = " + expression.toString());
-        three_address(temporary.toString(), expression.toString());
+        if (expression instanceof BinaryOperator) {
+            three_address(temporary.toString(), ((BinaryOperator)expression).left_toOperand(),
+                    expression.operator, ((BinaryOperator)expression).right_toOperand());
+        } else if (expression instanceof FunctionCall) {
+            three_address(temporary.toString(), expression.toString());
+        }
+        // TODO remove `reduce()` in `FunctionCall::toString()`
+        // if reduce() is called in extra toString(), emit extra line
         return temporary;
     }
 }

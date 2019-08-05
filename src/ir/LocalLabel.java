@@ -13,4 +13,8 @@ public class LocalLabel implements Code {
     public String build() {
         return ".L" + index + ":\n";
     }
+    @Override
+    public Code reduce() {
+        return this;
+    }
 }

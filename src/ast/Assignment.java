@@ -1,6 +1,6 @@
 package ast;
 
-import static front_end.Parser.tab;
+import static front_end.RecursiveDescentParser.tab;
 import static middle_end.IRGenerator.emit;
 import static middle_end.IRGenerator.three_address;
 
@@ -13,7 +13,7 @@ public class Assignment extends Statement {
     }
     @Override
     public void generate(final int before, final int after) {
-        emit(variable.toStringWithUpdate()  + " = " + expression.generate().toString());
+        emit(variable.toString()  + " = " + expression.generate().toString());
         three_address(variable.toString(), expression.generate().toString());
     }
     @Override

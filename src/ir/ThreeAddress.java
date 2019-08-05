@@ -1,6 +1,5 @@
 package ir;
 
-
 public class ThreeAddress implements Code {
     private final Register register;
     private final Operand left;
@@ -36,5 +35,50 @@ public class ThreeAddress implements Code {
         assembly.append(left.build());
         assembly.append(right.build());
         return assembly.toString();
+    }
+    public Code reduce() {
+        if (left instanceof Immediate && right instanceof Immediate) {
+            final int left_value = ((Immediate)left).value;
+            final int right_value = ((Immediate)right).value;
+            switch (operator) {
+                case "+":
+                    return new TwoAddress(register, new Immediate(left_value + right_value));
+                case "-":
+                    return new TwoAddress(register, new Immediate(left_value - right_value));
+                case "*":
+                    return new TwoAddress(register, new Immediate(left_value * right_value));
+                case "/":
+                    return new TwoAddress(register, new Immediate(left_value / right_value));
+            }
+        } else if (left instanceof Immediate) {
+            final int left_value = ((Immediate)left).value;
+            switch (operator) {
+                case "+": case "-":
+                    if (left_value == 0) {
+                        return new TwoAddress(register, left);
+                    }
+                case "*": case "/":
+                    if (left_value == 1) {
+                        return new TwoAddress(register, left);
+                    } else if (left_value == 0) {
+                        return new TwoAddress(register, new Immediate(0));
+                    }
+            }
+        } else if (right instanceof Immediate) {
+            final int right_value = ((Immediate)right).value;
+            switch (operator) {
+                case "+": case "-":
+                    if (right_value == 0) {
+                        return new TwoAddress(register, right);
+                    }
+                case "*": case "/":
+                    if (right_value == 1) {
+                        return new TwoAddress(register, right);
+                    } else if (right_value == 0) {
+                        return new TwoAddress(register, new Immediate(0));
+                    }
+            }
+        }
+        return this;
     }
 }

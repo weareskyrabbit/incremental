@@ -7,12 +7,13 @@ public class LocalVariable {
     LocalVariable(final String name, final int offset) {
         this.name = name;
         this.offset = offset;
+        this.version = 0;
     }
     @Override
     public String toString() {
         return name + version;
     }
-    public void update() {
-        version++;
+    int update() {
+        return version++;
     }
 }

@@ -20,9 +20,4 @@ public class VariableCall extends Expression {
     public String toS(int tab) {
         return local.name;
     }
-    public String toStringWithUpdate() {
-        local.update();
-        operator = local.toString();
-        return operator;
-    }
 }

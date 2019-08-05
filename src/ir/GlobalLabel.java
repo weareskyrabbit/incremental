@@ -13,4 +13,8 @@ public class GlobalLabel implements Code {
     public String build() {
         return ".global " + name + "\n" + name + ":\n";
     }
+    @Override
+    public Code reduce() {
+        return this;
+    }
 }

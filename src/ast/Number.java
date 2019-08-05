@@ -1,7 +1,7 @@
 package ast;
 
 public class Number extends Expression {
-    private final int value;
+    final int value;
     public Number(final int value) {
         super(Integer.toString(value));
         this.value = value;

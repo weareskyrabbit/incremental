@@ -9,8 +9,10 @@ Number factorial(Number n) {
 Number main() {
     Number a;
     Number b;
+    Number c;
     a = 2;
     b = 4;
+    c = 0 + 1 * a;
     while (b) {
         a = 6;
         print factorial(a);

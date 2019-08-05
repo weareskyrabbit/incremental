@@ -16,4 +16,8 @@ public class Return implements Code {
         return "  pop  rax\n" +
                 Builder.epilogue();
     }
+    @Override
+    public Code reduce() {
+        return this;
+    }
 }

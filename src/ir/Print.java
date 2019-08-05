@@ -13,4 +13,8 @@ public class Print implements Code {
     public String build() {
         return "  out  " + operand.toString();
     }
+    @Override
+    public Code reduce() {
+        return this;
+    }
 }

@@ -2,7 +2,6 @@ package ast;
 
 public class UnaryOperator extends Operator {
     private final Expression operand;
-    private static int count = 0;
     public UnaryOperator(final String operator, final Expression operand) {
         super(operator);
         this.operand = operand;

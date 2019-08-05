@@ -2,7 +2,7 @@ package driver;
 
 import back_end.Builder;
 import ast.FunctionDeclaration;
-import front_end.Parser;
+import front_end.RecursiveDescentParser;
 import front_end.ParsingException;
 import io.Reader;
 import io.Writer;
@@ -14,7 +14,7 @@ public class Driver {
     public static void main(String[] args) throws IOException {
         // front_end
         final String input = Reader.use(args[0] + ".grp" ,Reader::read);
-        final Parser parser = new Parser();
+        final RecursiveDescentParser parser = new RecursiveDescentParser();
         List<FunctionDeclaration> trees = null;
         try {
             trees = parser.parse(input);

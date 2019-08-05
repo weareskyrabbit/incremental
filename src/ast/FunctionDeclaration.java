@@ -5,7 +5,7 @@ import front_end.SymbolList;
 
 import java.util.Iterator;
 
-import static front_end.Parser.tab;
+import static front_end.RecursiveDescentParser.tab;
 import static middle_end.IRGenerator.*;
 
 public class FunctionDeclaration implements Node {
