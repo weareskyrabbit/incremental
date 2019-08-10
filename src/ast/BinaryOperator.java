@@ -23,25 +23,25 @@ public class BinaryOperator extends Operator {
         switch (operator) {
             case "+":
                 return "  pop  rdi\n" +
-                        "  pop  rax\n" +
-                        "  add  rax, rdi\n" +
-                        "  push rax\n";
+                       "  pop  rax\n" +
+                       "  add  rax, rdi\n" +
+                       "  push rax\n";
             case "-":
                 return "  pop  rdi\n" +
-                        "  pop  rax\n" +
-                        "  sub  rax, rdi\n" +
-                        "  push rax\n";
+                       "  pop  rax\n" +
+                       "  sub  rax, rdi\n" +
+                       "  push rax\n";
             case "*":
                 return "  pop  rdi\n" +
-                        "  pop  rax\n" +
-                        "  imul rax, rdi\n" +
-                        "  push rax\n";
+                       "  pop  rax\n" +
+                       "  imul rax, rdi\n" +
+                       "  push rax\n";
             case "/":
                 return "  pop  rdi\n" +
-                        "  pop  rax\n" +
-                        "  cqo\n" +
-                        "  idiv rdi\n" +
-                        "  push rax\n";
+                       "  pop  rax\n" +
+                       "  cqo\n" +
+                       "  idiv rdi\n" +
+                       "  push rax\n";
             default:
                 System.out.println("expected operator, but found `" + operator + "`");
                 System.exit(1);

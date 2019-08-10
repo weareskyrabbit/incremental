@@ -7,6 +7,31 @@ import front_end.token.*;
 import java.util.*;
 
 public class RecursiveDescentParser implements Parser {
+    private static final String[] reserved_words = {
+            // reserve words or symbols which have more than 2 letters
+            /* reserved words */
+            "void", "boolean",
+            "byte", "short", "int", "long", "char",
+            "float", "double",
+
+            "static", "abstract", "final",
+            "public", "protected", "private",
+            "extends", "implements", "throws",
+
+            "class", "enum", "interface",
+
+            "if", "else", "for", "while", "do", "try", "catch", "finally",
+            "return", "break", "continue", "throw",
+
+            "true", "false", "null",
+            /* symbols */
+            "+=", "-=", "*=", "/=", "%=",
+            ">=", "<=", "==", "!=",
+            "&&", "||",
+            ">>", "<<", ">>>", "<<<", ">>=", "<<=",
+            "->",
+            "::"
+    };
     private String input;
     private ParsingState state;
     private SymbolList current;
@@ -34,7 +59,7 @@ public class RecursiveDescentParser implements Parser {
         reserve(Type.Character);
 
         final List<FunctionDeclaration> function_declarations = new ArrayList<>();
-        while (match("Immediate")) {
+        while (match("Number")) {
             final FunctionDeclaration function_declaration = function_declaration();
             function_declarations.add(function_declaration);
         }
@@ -62,7 +87,7 @@ public class RecursiveDescentParser implements Parser {
         final SymbolList symbols = new SymbolList(current);
         current = symbols;
         consume('{');
-        while (match("Immediate")) {
+        while (match("Number")) {
             variable_declaration();
             consume(';');
         }
@@ -139,31 +164,35 @@ public class RecursiveDescentParser implements Parser {
         }
     }
     private Expression expression() throws ParsingException {
-        final Expression left = term();
-        if (match('*')) {
-            consume('*');
-            final Expression right = term();
-            return new BinaryOperator("*", left, right);
-        } else if (match('/')) {
-            consume('/');
-            final Expression right = term();
-            return new BinaryOperator("/", left, right);
-        } else {
-            return left;
+        Expression left = term();
+        while (true) {
+            if (match('+')) {
+                consume('+');
+                final Expression right = term();
+                left =  new BinaryOperator("+", left, right);
+            } else if (match('-')) {
+                consume('-');
+                final Expression right = term();
+                left = new BinaryOperator("-", left, right);
+            } else {
+                return left;
+            }
         }
     }
     private Expression term() throws ParsingException {
-        final Expression left = unary();
-        if (match('+')) {
-            consume('+');
-            final Expression right = unary();
-            return new BinaryOperator("+", left, right);
-        } else if (match('-')) {
-            consume('-');
-            final Expression right = unary();
-            return new BinaryOperator("-", left, right);
-        } else {
-            return left;
+        Expression left = unary();
+        while (true) {
+            if (match('*')) {
+                consume('*');
+                final Expression right = unary();
+                left = new BinaryOperator("*", left, right);
+            } else if (match('/')) {
+                consume('/');
+                final Expression right = unary();
+                left = new BinaryOperator("/", left, right);
+            } else {
+                return left;
+            }
         }
     }
     private Expression unary() throws ParsingException {
@@ -208,7 +237,7 @@ public class RecursiveDescentParser implements Parser {
         }
     }
     private void type() throws ParsingException {
-        consume("Immediate");
+        consume("Number");
     }
     private String identifier() throws ParsingException {
         skip_whitespace();
