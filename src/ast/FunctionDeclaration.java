@@ -2,6 +2,7 @@ package ast;
 
 import front_end.LocalVariable;
 import front_end.SymbolList;
+import middle_end.Function;
 
 import java.util.Iterator;
 
@@ -17,6 +18,7 @@ public class FunctionDeclaration implements Node {
         this.arguments = arguments;
         this.closure = closure;
     }
+
     public String generate() {
         clear();
         final int before = new_label();
@@ -55,5 +57,8 @@ public class FunctionDeclaration implements Node {
                 .append(closure.toS(tab))
                 .append(')');
         return builder.toString();
+    }
+    public Function gen() {
+        return new Function(name, arguments.symbols.size(), closure.gen2());
     }
 }

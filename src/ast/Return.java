@@ -1,6 +1,8 @@
 package ast;
 
 import back_end.Builder;
+import middle_end.Instruction;
+import middle_end.InstructionType;
 
 import static middle_end.IRGenerator._return;
 import static middle_end.IRGenerator.emit;
@@ -25,5 +27,10 @@ public class Return extends Statement {
     public String toS(int tab) {
         tab += 8;
         return "(return " + expression.toS(tab) + ")";
+    }
+    @Override
+    public Instruction gen() {
+        expression.gen();
+        return new Instruction(InstructionType.RET, null, null);
     }
 }

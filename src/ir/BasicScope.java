@@ -1,4 +1,4 @@
 package ir;
 
-public class BasicScope {
+public class BasicScope extends Instruction {
 }

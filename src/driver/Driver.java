@@ -1,6 +1,7 @@
 package driver;
 
-import back_end.Builder;
+import middle_end.Builder;
+import middle_end.Module;
 import ast.FunctionDeclaration;
 import front_end.RecursiveDescentParser;
 import front_end.ParsingException;
@@ -34,12 +35,20 @@ public class Driver {
             Writer.use(args[0] + ".ast", writer -> writer.write(s.toString()));
         }
         // middle_end
+        Builder.clear();
+        Module module = Builder.generate(trees);
+        module.build();
+        System.out.println(Builder.build());
+
+
         final StringBuilder ir = new StringBuilder();
         ir.append("; tab=8\n");
         trees.forEach(tree -> ir.append(tree.generate()).append('\n'));
         Writer.use(args[0] + ".ir", writer -> writer.write(ir.toString()));
+        /*
         // back_end
         final String output = new Builder().build(trees);
         Writer.use(args[0] + ".s", writer -> writer.write(output));
+        */
     }
 }

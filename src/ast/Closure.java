@@ -3,9 +3,12 @@ package ast;
 import back_end.Builder;
 import front_end.LocalVariable;
 import front_end.SymbolList;
+import middle_end.Instruction;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static front_end.RecursiveDescentParser.tab;
 
@@ -73,5 +76,15 @@ public class Closure extends Statement {
         }
         builder.append(')');
         return builder.toString();
+    }
+    @Override
+    public Instruction gen() {
+        return null;
+    }
+    public List<Instruction> gen2() {
+        return statements.stream()
+                .map(Statement::gen)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

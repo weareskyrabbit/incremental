@@ -2,6 +2,8 @@ package middle_end;
 
 import io.Writer;
 import ir.*;
+import ir.Register;
+import ir.Operand;
 
 import java.io.IOException;
 import java.util.ArrayList;
