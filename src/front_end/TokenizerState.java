@@ -1,6 +1,6 @@
 package front_end;
 
-public enum  ParsingState {
+public enum TokenizerState {
     STANDARD,
     SHORT_COMMENT,
     LONG_COMMENT

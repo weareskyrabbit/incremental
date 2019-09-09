@@ -1,7 +1,5 @@
 package front_end.token;
 
-import front_end.Tag;
-
 public class Word extends Token {
     public String lexeme = "";
     public Word(String lexeme, int tag) {

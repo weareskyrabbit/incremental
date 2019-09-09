@@ -4,6 +4,10 @@ import middle_end.Instruction;
 import middle_end.InstructionType;
 import middle_end.Register;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static middle_end.IRGenerator._print;
 import static middle_end.IRGenerator.emit;
 
@@ -28,8 +32,10 @@ public class Print extends Statement {
         return "(print " + expression.toS(tab) + ")";
     }
     @Override
-    public Instruction gen() {
-        expression.gen();
-        return new Instruction(InstructionType.OUT, Register.RAX, null);
+    public List<Instruction> gen() {
+        final List<Instruction> list = new ArrayList<>(expression.red());
+        list.add(new Instruction(InstructionType.POP, Register.RAX, null));
+        list.add(new Instruction(InstructionType.OUT, Register.RAX, null));
+        return list;
     }
 }

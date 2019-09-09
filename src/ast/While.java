@@ -1,5 +1,9 @@
 package ast;
 
+import middle_end.Instruction;
+
+import java.util.List;
+
 import static middle_end.IRGenerator.*;
 
 public class While extends Statement {
@@ -51,5 +55,9 @@ public class While extends Statement {
                 .append(closure.toS(tab))
                 .append(')');
         return builder.toString();
+    }
+    @Override
+    public List<Instruction> gen() {
+        return null;
     }
 }

@@ -2,7 +2,7 @@ package middle_end;
 
 public class Register implements Operand {
     private final String name;
-    Register(final String name) {
+    public Register(final String name) {
         this.name = name;
     }
     @Override

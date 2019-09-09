@@ -1,5 +1,9 @@
 package ast;
 
+import middle_end.Instruction;
+
+import java.util.List;
+
 import static middle_end.IRGenerator.emit;
 import static middle_end.IRGenerator.emit_label;
 import static middle_end.IRGenerator.new_label;
@@ -31,5 +35,9 @@ public class Else extends Statement {
     @Override
     public String toS(final int tab) {
         return "";
+    }
+    @Override
+    public List<Instruction> gen() {
+        return null;
     }
 }

@@ -36,10 +36,18 @@ public class Instruction {
             case RET:
                 Builder.append("  ret\n");
                 break;
+            case OUT:
+                Builder.append("  out  " + left.toString() + "\n");
+                break;
+            case NOP:
+                Builder.append("  nop\n");
+                break;
         }
     }
     boolean necessary() {
         switch (type) {
+            case NOP:
+                return false;
             case ADD:
                 if (left instanceof Immediate && ((Immediate)left).is_zero() ||
                         right instanceof Immediate && ((Immediate)right).is_zero()) {

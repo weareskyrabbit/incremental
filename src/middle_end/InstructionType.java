@@ -10,5 +10,6 @@ public enum InstructionType {
     MOV,
     RET,
     CALL,
-    OUT
+    OUT,
+    NOP
 }

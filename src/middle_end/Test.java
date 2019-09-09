@@ -1,8 +1,11 @@
 package middle_end;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Test {
     public static void main(String[] args) {
-        final Instruction[] instructions_factorial = {
+        final List<Instruction> instructions_factorial = Arrays.asList(
                 new Instruction(InstructionType.PUSH,
                         Register.RDI,
                         null),
@@ -29,8 +32,8 @@ public class Test {
                         null,
                         null)
 
-        };
-        final Instruction[] instructions_main = {
+        );
+        final List<Instruction> instructions_main = Arrays.asList(
                 new Instruction(InstructionType.MOV,
                         Register.RAX,
                         Register.RBP),
@@ -53,15 +56,15 @@ public class Test {
                         new Immediate(5),
                         null,
                         new Label("factorial"))
-        };
-        final Function[] function_declarations = {
+        );
+        final List<Function> function_declarations = Arrays.asList(
                 new Function("factorial",
                         0,
                         instructions_factorial),
                 new Function("main",
                         3,
                         instructions_main)
-        };
+        );
         new Module(function_declarations).build();
         System.out.println(Builder.build());
     }

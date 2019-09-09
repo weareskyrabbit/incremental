@@ -1,5 +1,9 @@
 package ast;
 
+import middle_end.Instruction;
+
+import java.util.List;
+
 import static middle_end.IRGenerator.emit_label;
 import static middle_end.IRGenerator.new_label;
 
@@ -32,5 +36,9 @@ public class Sequence extends Statement {
     @Override
     public String toS(int tab) {
         return "";
+    }
+    @Override
+    public List<Instruction> gen() {
+        return null;
     }
 }

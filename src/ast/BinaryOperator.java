@@ -1,8 +1,14 @@
 package ast;
 
-import ir.Immediate;
-import ir.Operand;
-import ir.Register;
+import middle_end.Immediate;
+import middle_end.Instruction;
+import middle_end.Operand;
+import middle_end.Register;
+import middle_end.InstructionType;
+
+import javax.print.DocFlavor;
+import java.util.ArrayList;
+import java.util.List;
 
 import static front_end.RecursiveDescentParser.tab;
 
@@ -67,6 +73,7 @@ public class BinaryOperator extends Operator {
                 .append(')');
         return builder.toString();
     }
+    /*
     @Override
     public String toString() {
         return left.toString() + " " + operator + " " + right.toString();
@@ -86,5 +93,27 @@ public class BinaryOperator extends Operator {
             return new Immediate(((Number)right).value);
         }
         return new Register("");
+    }
+    */
+    public List<Instruction> gen() {
+        final List<Instruction> list = new ArrayList<>();
+        list.add(new Instruction(InstructionType.POP, Register.RDI, null));
+        list.add(new Instruction(InstructionType.POP, Register.RAX, null));
+        switch (operator) {
+            case "+":
+                list.add(new Instruction(InstructionType.ADD, Register.RAX, Register.RDI));
+                break;
+            case "-":
+                list.add(new Instruction(InstructionType.SUB, Register.RAX, Register.RDI));
+                break;
+            case "*":
+                list.add(new Instruction(InstructionType.MUL, Register.RAX, Register.RDI));
+                break;
+            case "/":
+                list.add(new Instruction(InstructionType.DIV, Register.RAX, Register.RDI));
+                break;
+        }
+        list.add(new Instruction(InstructionType.PUSH, Register.RAX, null));
+        return list;
     }
 }

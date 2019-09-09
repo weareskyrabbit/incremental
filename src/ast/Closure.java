@@ -5,6 +5,7 @@ import front_end.LocalVariable;
 import front_end.SymbolList;
 import middle_end.Instruction;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import static front_end.RecursiveDescentParser.tab;
 
 public class Closure extends Statement {
     // TODO replace it with Seq in mGroupy/src/front_end/inter
-    private final SymbolList symbols;
+    final SymbolList symbols;
     private final List<Statement> statements;
     public Closure(final SymbolList symbols, final List<Statement> statements) {
         this.symbols = symbols;
@@ -78,12 +79,13 @@ public class Closure extends Statement {
         return builder.toString();
     }
     @Override
-    public Instruction gen() {
-        return null;
-    }
-    public List<Instruction> gen2() {
-        return statements.stream()
+    public List<Instruction> gen() {
+        final List<Instruction> list = new ArrayList<>();
+        statements.stream()
                 .map(Statement::gen)
+                .filter(Objects::nonNull)
+                .forEach(list::addAll);
+        return list.stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }

@@ -1,7 +1,5 @@
 package front_end.token;
 
-import front_end.Tag;
-
 // TODO implement type system
 public class Type extends Word {
     public int width = 0;

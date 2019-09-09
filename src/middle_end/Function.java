@@ -25,7 +25,7 @@ public class Function {
                 new Immediate(locals * 8)));
         list.addAll(instructions);
 
-        optimize();
+        /* optimize(); */
 
     }
     void optimize() {

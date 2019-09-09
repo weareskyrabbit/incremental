@@ -59,6 +59,6 @@ public class FunctionDeclaration implements Node {
         return builder.toString();
     }
     public Function gen() {
-        return new Function(name, arguments.symbols.size(), closure.gen2());
+        return new Function(name, closure.symbols.symbols.size(), closure.gen());
     }
 }

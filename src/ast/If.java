@@ -1,5 +1,9 @@
 package ast;
 
+import middle_end.Instruction;
+
+import java.util.List;
+
 import static middle_end.IRGenerator.emit_label;
 import static middle_end.IRGenerator.new_label;
 
@@ -43,5 +47,9 @@ public class If extends Statement {
                 .append(then_closure.toS(tab))
                 .append(')');
         return builder.toString();
+    }
+    @Override
+    public List<Instruction> gen() {
+        return null;
     }
 }

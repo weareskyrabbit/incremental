@@ -14,7 +14,7 @@ import java.util.List;
 public class Driver {
     public static void main(String[] args) throws IOException {
         // front_end
-        final String input = Reader.use(args[0] + ".grp" ,Reader::read);
+        final String input = Reader.use(args[0] + ".grp", Reader::read);
         final RecursiveDescentParser parser = new RecursiveDescentParser();
         List<FunctionDeclaration> trees = null;
         try {

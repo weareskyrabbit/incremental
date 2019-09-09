@@ -1,5 +1,13 @@
 package ast;
 
+import middle_end.Instruction;
+import middle_end.InstructionType;
+import middle_end.Register;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static front_end.RecursiveDescentParser.tab;
 import static middle_end.IRGenerator.emit;
 import static middle_end.IRGenerator.three_address;
@@ -40,5 +48,11 @@ public class Assignment extends Statement {
         builder.append(s)
                 .append(')');
         return  builder.toString();
+    }
+    @Override
+    public List<Instruction> gen() {
+        final List<Instruction> list = new ArrayList<>(expression.red());
+        list.add(new Instruction(InstructionType.POP, new Register(variable.toString()), null));
+        return list;
     }
 }

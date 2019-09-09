@@ -3,6 +3,11 @@ package ast;
 import back_end.Builder;
 import middle_end.Instruction;
 import middle_end.InstructionType;
+import middle_end.Register;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static middle_end.IRGenerator._return;
 import static middle_end.IRGenerator.emit;
@@ -29,8 +34,12 @@ public class Return extends Statement {
         return "(return " + expression.toS(tab) + ")";
     }
     @Override
-    public Instruction gen() {
-        expression.gen();
-        return new Instruction(InstructionType.RET, null, null);
+    public List<Instruction> gen() {
+        final List<Instruction> list = new ArrayList<>(expression.red());
+        list.add(new Instruction(InstructionType.POP, Register.RAX, null));
+        list.add(new Instruction(InstructionType.MOV, Register.RSP, Register.RBP));
+        list.add(new Instruction(InstructionType.POP, Register.RBP, null));
+        list.add(new Instruction(InstructionType.RET, null, null));
+        return list;
     }
 }
