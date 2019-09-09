@@ -80,7 +80,7 @@ public class RecursiveDescentParser implements Parser {
         this.line = 1;
 
         final List<FunctionDeclaration> function_declarations = new ArrayList<>();
-        while (match(Tag.NUM)) {
+        while (match(Tag.INT)) {
             final FunctionDeclaration function_declaration = function_declaration();
             function_declarations.add(function_declaration);
         }
@@ -108,7 +108,7 @@ public class RecursiveDescentParser implements Parser {
         final SymbolList symbols = new SymbolList(current);
         current = symbols;
         consume('{');
-        while (match(Tag.NUM)) {
+        while (match(Tag.INT)) {
             variable_declaration();
             consume(';');
         }
@@ -205,11 +205,10 @@ public class RecursiveDescentParser implements Parser {
         }
     }
     private Expression factor() throws ParsingException {
-        final char head = input.charAt(0);
-        if (Character.isDigit(head)) {
+        if (match(Tag.NUM)) {
             final int value = integer();
             return new ast.Number(value);
-        } else if (Character.isLetter(head)) {
+        } else if (match(Tag.ID)) {
             final String name = identifier();
             if (match('(')) {
                 consume('(');
@@ -236,7 +235,7 @@ public class RecursiveDescentParser implements Parser {
         }
     }
     private void type() throws ParsingException {
-        consume(Tag.NUM);
+        consume(Tag.INT);
     }
     public static String tab(int tab) {
         // TODO improve tab system
