@@ -21,4 +21,8 @@ public class TwoAddress implements Code {
     public Code reduce() {
         return this;
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }

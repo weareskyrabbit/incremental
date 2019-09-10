@@ -89,4 +89,9 @@ public class Closure extends Statement {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
+    public List<ir.Code> toIR2() {
+        return statements.stream()
+                .map(Statement::toIR)
+                .collect(Collectors.toList());
+    }
 }

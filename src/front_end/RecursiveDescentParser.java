@@ -1,6 +1,7 @@
 package front_end;
 
 import ast.*;
+import ast.String_;
 import front_end.token.*;
 import front_end.token.Number;
 
@@ -38,6 +39,7 @@ public class RecursiveDescentParser implements Parser {
     private Tokenizer tokenizer;
     private Token now;
     private SymbolList current;
+    private List<String> strings;
     /* private Node pointer; */
     public int line;
 
@@ -49,7 +51,19 @@ public class RecursiveDescentParser implements Parser {
         if (match(tag)) {
             now = tokenizer.tokenize();
         } else {
-            throw new ParsingException("expecting `" + tag + "`, but found `" + now.tag + "`");
+            if (tag < 0xff && now.tag < 0xff) {
+                throw new ParsingException("expecting `" + (char) tag +
+                        "`, but found `" + (char) now.tag + "`");
+            } else if (tag < 0xff) {
+                throw new ParsingException("expecting `" + (char) tag +
+                        "`, but found `" + now.tag + "`");
+            } else if (now.tag < 0xff) {
+                throw new ParsingException("expecting `" + tag +
+                        "`, but found `" + (char) now.tag + "`");
+            } else {
+                throw new ParsingException("expecting `" + tag +
+                        "`, but found `" + now.tag + "`");
+            }
         }
     }
     private int integer() throws ParsingException {
@@ -72,11 +86,26 @@ public class RecursiveDescentParser implements Parser {
         }
         return id;
     }
+    private String string() throws ParsingException {
+        final String string;
+        if (match(Tag.STR)) {
+            string = ((front_end.token.String_)now).value;
+            strings.add(string);
+            now = tokenizer.tokenize();
+        } else {
+            throw new ParsingException("expecting `STR`, but found `" + now.tag + "`");
+        }
+        return string;
+    }
+    public List<String> strings() {
+        return strings;
+    }
     public List<FunctionDeclaration> parse(final String input) throws ParsingException {
         this.input = input;
         this.tokenizer = new Tokenizer(input);
         this.now = tokenizer.tokenize();
         this.current = null;
+        this.strings = new ArrayList<>();
         this.line = 1;
 
         final List<FunctionDeclaration> function_declarations = new ArrayList<>();
@@ -148,7 +177,12 @@ public class RecursiveDescentParser implements Parser {
             return new Return(expression);
         } else if (match(Tag.PRINT)) {
             consume(Tag.PRINT);
-            final Expression expression = expression();
+            Expression expression;
+            if (match(Tag.STR)) {
+                expression = new String_(string());
+            } else {
+                expression = expression();
+            }
             consume(';');
             return new Print(expression);
         } else {

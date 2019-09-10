@@ -15,4 +15,8 @@ public class Register implements Operand {
                 name +
                 "\n";
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }

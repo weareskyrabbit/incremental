@@ -13,4 +13,8 @@ public class Immediate implements Operand {
     public String build() {
         return "push " + value;
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }

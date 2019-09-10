@@ -7,7 +7,7 @@ public class SymbolList {
     final SymbolList enclosing;
     public final Map<String, LocalVariable> symbols;
     private int size;
-    SymbolList(final SymbolList enclosing) {
+    public SymbolList(final SymbolList enclosing) {
         this.enclosing = enclosing;
         this.symbols = new HashMap<>();
         this.size = 0;

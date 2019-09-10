@@ -61,4 +61,7 @@ public class FunctionDeclaration implements Node {
     public Function gen() {
         return new Function(name, closure.symbols.symbols.size(), closure.gen());
     }
+    public ir.Function toIR() {
+        return new ir.Function(name, closure.toIR2());
+    }
 }

@@ -17,4 +17,9 @@ public class Print implements Code {
     public Code reduce() {
         return this;
     }
+
+    @Override
+    public int toWordCode() {
+        return 0x30000000 | (operand.toWordCode() << 16 & 0x00110000);
+    }
 }

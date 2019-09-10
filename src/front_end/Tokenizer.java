@@ -19,25 +19,22 @@ public class Tokenizer {
         this.line = 1;
         this.state = TokenizerState.STANDARD;
         this.words = new HashMap<>();
-        reserve(new Word("if",    Tag.IF));
-        reserve(new Word("else",  Tag.ELSE));
-        reserve(new Word("while", Tag.WHILE));
-        reserve(new Word("do",    Tag.DO));
-        reserve(new Word("break", Tag.BREAK));
+        reserve(new Word("if",     Tag.IF));
+        reserve(new Word("else",   Tag.ELSE));
+        reserve(new Word("while",  Tag.WHILE));
+        reserve(new Word("do",     Tag.DO));
+        reserve(new Word("break",  Tag.BREAK));
         reserve(new Word("return", Tag.RET));
-        reserve(new Word("print", Tag.PRINT));
-        reserve(Word.True);
-        reserve(Word.False);
-        reserve(Type.Int);
-        reserve(Type.Float);
-        reserve(Type.Byte);
-        reserve(Type.Boolean);
-        reserve(Type.Character);
+        reserve(new Word("print",  Tag.PRINT));
+        reserve(new Word("int",    Tag.INT));
     }
     private void reserve(final Word word) {
         words.put(word.lexeme, word);
     }
     Token tokenize() {
+        if (position >= input.length) {
+            return Token.EOF;
+        }
         switch (state) {
             case STANDARD:
                 while (Character.isWhitespace(input[position])) {
@@ -55,7 +52,6 @@ public class Tokenizer {
                         } else {
                             return new Token('&');
                         }
-
                     case '|':
                         position++;
                         if (input[position] == '|') {
@@ -109,6 +105,10 @@ public class Tokenizer {
                         } else {
                             return new Token('/');
                         }
+                    case '\"':
+                        position++;
+                        state = TokenizerState.STRING;
+                        return tokenize();
                 }
                 if (Character.isDigit(input[position])) {
                     int int_value = 0;
@@ -142,9 +142,21 @@ public class Tokenizer {
                     return word;
                 } else {
                     Token token = new Token(input[position]);
-                    input[position] = ' ';
+                    position++;
                     return token;
                 }
+            case STRING:
+                StringBuilder builder = new StringBuilder();
+                while (input[position] != '\"') {
+                    builder.append(input[position]);
+                    if (input[position] == '\n') {
+                        line++;
+                    }
+                    position++;
+                }
+                position++;
+                state = TokenizerState.STANDARD;
+                return new String_(builder.toString());
             case SHORT_COMMENT:
                 while (input[position] != '\n') {
                     position++;

@@ -5,7 +5,6 @@ import middle_end.InstructionType;
 import middle_end.Register;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static middle_end.IRGenerator._print;
@@ -37,5 +36,9 @@ public class Print extends Statement {
         list.add(new Instruction(InstructionType.POP, Register.RAX, null));
         list.add(new Instruction(InstructionType.OUT, Register.RAX, null));
         return list;
+    }
+    @Override
+    public ir.Code toIR() {
+        return new ir.Print(new ir.String_(expression.toString()));
     }
 }

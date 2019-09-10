@@ -36,4 +36,8 @@ public class Branch implements Code {
     public Code reduce() {
         return this;
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }

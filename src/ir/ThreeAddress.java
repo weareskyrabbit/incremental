@@ -81,4 +81,8 @@ public class ThreeAddress implements Code {
         }
         return this;
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }

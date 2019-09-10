@@ -9,4 +9,5 @@ public class Token {
     public String toString() {
         return "" + (char) tag;
     }
+    public static final Token EOF = new Token(Tag.EOF);
 }

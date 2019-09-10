@@ -17,4 +17,8 @@ public class GlobalLabel implements Code {
     public Code reduce() {
         return this;
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }

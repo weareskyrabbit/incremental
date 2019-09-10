@@ -5,4 +5,8 @@ public class Memory implements Operand {
     public String build() {
         return "";
     }
+    @Override
+    public int toWordCode() {
+        return 0;
+    }
 }
