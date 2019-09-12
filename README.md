@@ -1,13 +1,21 @@
 A small Compiler
 
 # Memo
-Source Code  
--> front_end  
-AST  
--> middle_end  
-IR  
--> back_end  
-Assembly  
+```
+Source Code (.grp)
+AST         (.ast)
+IR          (.ir)
+Assembly    (.s)
+
+WC          (.wc)
+```
+```
+Source Code -> AST      : front_end
+AST         -> IR       : middle_end
+IR          -> Assembly : back_end
+
+IR          -> WC       : middle_end
+```
 ## Grammar
 ```
 parse : [function_declaration]*
