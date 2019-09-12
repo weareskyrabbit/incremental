@@ -1,6 +1,6 @@
 A small Compiler
 
-# Memo
+# File extention
 ```
 Source Code (.grp)
 AST         (.ast)
@@ -9,6 +9,7 @@ Assembly    (.s)
 
 WC          (.wc)
 ```
+# Converter
 ```
 Source Code -> AST      : front_end
 AST         -> IR       : middle_end
@@ -16,7 +17,7 @@ IR          -> Assembly : back_end
 
 IR          -> WC       : middle_end
 ```
-## Grammar
+# Grammar
 ```
 parse : [function_declaration]*
 function_declaration : type identifier '(' [ type identifier [ ',' type identifier ]* ]? ')' closure
@@ -27,7 +28,7 @@ statement : "if" '(' integer ')' closure
           | identifier '=' integer ';'
 type : "Number"
 ```
-## `.wc` file layout
+# `.wc` file layout
 ```
 int magic;
 int functions_size;
@@ -44,4 +45,11 @@ constant
 ```
 int size;
 byte[] value;
+```
+# library
+```
+group : Array, List, Set, Map
+stream : 
+math : sin, cos, tan, max, min
+io : File FileReader FileWriter
 ```
