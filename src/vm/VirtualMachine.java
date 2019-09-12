@@ -16,7 +16,7 @@ public class VirtualMachine {
     private int position;
 
     private int[] instructions;
-    private java.lang.String[] constant_pool;
+    private String[] constant_pool;
 
     private int counter; // program counter
     private final Stack<Integer> stack;
@@ -29,20 +29,20 @@ public class VirtualMachine {
         if (magic != 0xdeadbeef) {
             System.out.println("magic is invalid");
         }
-        int function_size = read_u4();
+        int functions_size = read_u4();
         int instructions_size = read_u4();
         instructions = new int[instructions_size];
         for (int i = 0; i < instructions_size; i++) {
             instructions[i] = read_u4();
         }
-        for (int i = 0; i < function_size - 1; i++) {
+        for (int i = 0; i < functions_size - 1; i++) {
             instructions_size = read_u4();
             for (int j = 0; j < instructions_size; j++) {
                 read_u4();
             }
         }
         int constant_pool_size = read_u4();
-        constant_pool = new java.lang.String[constant_pool_size];
+        constant_pool = new String[constant_pool_size];
         for (int i = 0; i < constant_pool_size; i++) {
             int size = read_u4();
             byte[] bytes = read(size);
@@ -127,7 +127,7 @@ public class VirtualMachine {
                 .collect(Collectors.toList());
 
         try (final DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
-                new FileOutputStream("bin.wrd")))) {
+                new FileOutputStream("hello.wc")))) {
             dos.writeInt(0xdeadbeef);       // magic
             dos.writeInt(ir.size());        // functions size
             for (ir.Function function : ir) {
@@ -151,7 +151,7 @@ public class VirtualMachine {
         final VirtualMachine vm = new VirtualMachine();
 
         try (final BufferedInputStream bis = new BufferedInputStream(
-                new FileInputStream("bin.wrd"))) {
+                new FileInputStream("hello.wc"))) {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             byte[] data = new byte[1024];
             int n = bis.read(data);
