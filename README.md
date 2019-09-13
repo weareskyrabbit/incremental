@@ -41,11 +41,18 @@ function
 int instructions_size;
 int[] instructions;
 ```
-constant
+constant string
 ```
+int tag;
 int size;
 byte[] value;
 ```
+constant int
+```
+int tag;
+int value;
+```
+(VirtualMachine)[https://github.com/sKyrBBit/challenging]
 # library
 ```
 group : Array, List, Set, Map
