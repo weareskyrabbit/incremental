@@ -17,4 +17,8 @@ public class Immediate implements Operand {
     public int toWC() {
         return value;
     }
+    @Override
+    public String toAssembly() {
+        return "" + value;
+    }
 }

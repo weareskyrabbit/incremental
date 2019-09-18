@@ -20,4 +20,8 @@ public class Assign implements Code {
         return 0x30000000 | (left.toWC() << 16 & 0x00110000);
     }
     // TODO
+    @Override
+    public String toAssembly() {
+        return "";
+    }
 }

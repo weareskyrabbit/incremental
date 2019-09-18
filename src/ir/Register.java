@@ -30,4 +30,8 @@ public class Register implements Operand {
     public static int registers_size() {
         return counter;
     }
+    @Override
+    public String toAssembly() {
+        return "";
+    }
 }

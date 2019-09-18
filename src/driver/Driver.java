@@ -109,10 +109,18 @@ public class Driver {
         Writer.use(args[0] + ".s", writer -> writer.write(output));
         */
         // IR -> Assembly
-        StringBuilder assembly_result = new StringBuilder();
+        StringBuilder assembly_result = new StringBuilder(".intel_syntax noprefix\n");
+        for (int i = 0; i < ast_result2.length; i++) {
+            assembly_result.append(".Lc")
+                    .append(i)
+                    .append(":\n")
+                    .append("\t.ascii \"")
+                    .append(ast_result2[i])
+                    .append("\\0\"\n");
+        }
         ir_result1.stream()
                 .map(ir.Function::toAssembly)
                 .forEach(assembly_result::append);
-        Writer.use("hello.s", writer -> writer.write(assembly_result.toString()));
+        Writer.use(args[0] + ".s", writer -> writer.write(assembly_result.toString()));
     }
 }

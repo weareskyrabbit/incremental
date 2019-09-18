@@ -27,4 +27,7 @@ public class Print implements Code {
         }
     }
     // TODO
+    public String toAssembly() {
+        return "\tmov     rdi, [.Lc" + operand.toAssembly() + "]\n\tcall    _printf\n";
+    }
 }

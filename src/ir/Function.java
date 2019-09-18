@@ -19,7 +19,15 @@ public class Function {
                 .collect(Collectors.toList());
     }
     public String toAssembly() {
-        return "";
+        StringBuilder builder = new StringBuilder();
+        builder.append(".globl ")
+                .append(name)
+                .append("\n")
+                .append(name)
+                .append(":\n")
+                .append("\tpush    rbp\n\tmov     rbp, rsp\n\tsub     rsp, 0\n");
+        instructions.forEach(instruction -> builder.append(instruction.toAssembly()));
+        return builder.toString();
     }
     @Override
     public String toString() {

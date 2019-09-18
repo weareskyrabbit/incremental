@@ -108,4 +108,8 @@ public class ThreeAddress implements Code {
                 return 0;
         }
     }
+    @Override
+    public String toAssembly() {
+        return "";
+    }
 }

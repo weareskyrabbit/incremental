@@ -40,4 +40,8 @@ public class Branch implements Code {
     public int toWC() {
         return 0;
     }
+    @Override
+    public String toAssembly() {
+        return "";
+    }
 }

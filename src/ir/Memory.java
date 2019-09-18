@@ -9,4 +9,8 @@ public class Memory implements Operand {
     public int toWC() {
         return 0;
     }
+    @Override
+    public String toAssembly() {
+        return "";
+    }
 }

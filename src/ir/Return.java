@@ -24,4 +24,9 @@ public class Return implements Code {
     public int toWC() {
         return 0;
     }
+    @Override
+    public String toAssembly() {
+        return "\tmov     rax, " + operand.toAssembly() +
+                "\n\tmov     rsp, rbp\n\tpop     rbp\n\tret\n";
+    }
 }

@@ -13,4 +13,8 @@ public class String_ implements Operand {
     public int toWC() {
         return 0x00;
     }
+    @Override
+    public String toAssembly() {
+        return "";
+    }
 }
