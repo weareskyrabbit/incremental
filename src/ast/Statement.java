@@ -9,7 +9,7 @@ public abstract class Statement implements Node {
     // translate AST into IR
     public void generate(final int before, final int after) {}
     public abstract List<Instruction> gen();
-    public ir.Code toIR() {
+    public List<ir.Code> toIR() {
         return null;
     }
 }

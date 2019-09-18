@@ -34,4 +34,7 @@ public abstract class Expression implements Node {
     public List<Instruction> red() {
         return Collections.singletonList(new Instruction(InstructionType.NOP, null, null));
     }
+    public ir.Operand toIR() {
+        return null;
+    }
 }

@@ -13,9 +13,21 @@ public class Function {
     public int instructions_size() {
         return instructions.size();
     }
-    public List<Integer> toWordCode() {
+    public List<Integer> toWC() {
         return instructions.stream()
-                .map(Code::toWordCode)
+                .map(Code::toWC)
                 .collect(Collectors.toList());
+    }
+    public String toAssembly() {
+        return "";
+    }
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name)
+                .append(" {\n");
+        instructions.forEach(builder::append);
+        builder.append("}\n");
+        return builder.toString();
     }
 }

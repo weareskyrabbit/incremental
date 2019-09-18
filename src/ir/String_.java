@@ -10,7 +10,7 @@ public class String_ implements Operand {
         return null; // TODO
     }
     @Override
-    public int toWordCode() {
+    public int toWC() {
         return 0x00;
     }
 }

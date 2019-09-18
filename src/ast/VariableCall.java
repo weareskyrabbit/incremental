@@ -1,6 +1,8 @@
 package ast;
 
 import front_end.LocalVariable;
+import ir.Operand;
+import ir.Register;
 
 public class VariableCall extends Expression {
     private final LocalVariable local;
@@ -19,5 +21,9 @@ public class VariableCall extends Expression {
     @Override
     public String toS(int tab) {
         return local.name;
+    }
+    @Override
+    public Operand toIR() {
+        return new Register(toString());
     }
 }

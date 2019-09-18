@@ -90,7 +90,9 @@ public class RecursiveDescentParser implements Parser {
         final String string;
         if (match(Tag.STR)) {
             string = ((front_end.token.String_)now).value;
-            strings.add(string);
+            if (!strings.contains(string)) {
+                strings.add(string);
+            }
             now = tokenizer.tokenize();
         } else {
             throw new ParsingException("expecting `STR`, but found `" + now.tag + "`");
@@ -100,7 +102,7 @@ public class RecursiveDescentParser implements Parser {
     public List<String> strings() {
         return strings;
     }
-    public List<FunctionDeclaration> parse(final String input) throws ParsingException {
+    public List<FunctionDeclare> parse(final String input) throws ParsingException {
         this.input = input;
         this.tokenizer = new Tokenizer(input);
         this.now = tokenizer.tokenize();
@@ -108,14 +110,14 @@ public class RecursiveDescentParser implements Parser {
         this.strings = new ArrayList<>();
         this.line = 1;
 
-        final List<FunctionDeclaration> function_declarations = new ArrayList<>();
+        final List<FunctionDeclare> function_declarations = new ArrayList<>();
         while (match(Tag.INT)) {
-            final FunctionDeclaration function_declaration = function_declaration();
+            final FunctionDeclare function_declaration = function_declaration();
             function_declarations.add(function_declaration);
         }
         return function_declarations;
     }
-    private FunctionDeclaration function_declaration() throws ParsingException {
+    private FunctionDeclare function_declaration() throws ParsingException {
         final SymbolList symbols = new SymbolList(current);
         current = symbols;
         type();
@@ -131,7 +133,7 @@ public class RecursiveDescentParser implements Parser {
         consume(')');
         final Closure closure = closure();
         current = current.enclosing;
-        return new FunctionDeclaration(name, symbols, closure);
+        return new FunctionDeclare(name, symbols, closure);
     }
     private Closure closure() throws ParsingException {
         final SymbolList symbols = new SymbolList(current);
@@ -179,7 +181,8 @@ public class RecursiveDescentParser implements Parser {
             consume(Tag.PRINT);
             Expression expression;
             if (match(Tag.STR)) {
-                expression = new String_(string());
+                final String string= string();
+                expression = new String_(string, strings.indexOf(string));
             } else {
                 expression = expression();
             }
@@ -193,7 +196,7 @@ public class RecursiveDescentParser implements Parser {
 
             final LocalVariable variable = current.get(name);
             variable.update();
-            return new Assignment(new VariableCall(variable), expression);
+            return new Assign(new VariableCall(variable), expression);
         }
     }
     private Expression expression() throws ParsingException {

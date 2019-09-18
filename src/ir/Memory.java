@@ -6,7 +6,7 @@ public class Memory implements Operand {
         return "";
     }
     @Override
-    public int toWordCode() {
+    public int toWC() {
         return 0;
     }
 }

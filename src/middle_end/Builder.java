@@ -1,6 +1,6 @@
 package middle_end;
 
-import ast.FunctionDeclaration;
+import ast.FunctionDeclare;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,9 +16,9 @@ public class Builder {
     public static String build() {
         return assembly.toString();
     }
-    public static Module generate(List<FunctionDeclaration> trees) {
+    public static Module generate(List<FunctionDeclare> trees) {
         return new Module(trees.stream()
-                .map(FunctionDeclaration::gen)
+                .map(FunctionDeclare::gen)
                 .collect(Collectors.toList()));
     }
 }

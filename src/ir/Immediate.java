@@ -14,7 +14,7 @@ public class Immediate implements Operand {
         return "push " + value;
     }
     @Override
-    public int toWordCode() {
-        return 0;
+    public int toWC() {
+        return value;
     }
 }

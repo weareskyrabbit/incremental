@@ -1,8 +1,10 @@
 package ast;
 
 public class String_ extends Expression {
-    public String_(final String value) {
+    private final int offset;
+    public String_(final String value, final int offset) {
         super(value);
+        this.offset = offset;
     }
     @Override
     public String build() {
@@ -10,6 +12,10 @@ public class String_ extends Expression {
     }
     @Override
     public String toS(int tab) {
-        return "";
+        return "\"" + operator + "\"";
+    }
+    @Override
+    public ir.Operand toIR() {
+        return new ir.Immediate(offset);
     }
 }

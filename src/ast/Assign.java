@@ -1,5 +1,6 @@
 package ast;
 
+import ir.Code;
 import middle_end.Instruction;
 import middle_end.InstructionType;
 import middle_end.Register;
@@ -12,10 +13,10 @@ import static front_end.RecursiveDescentParser.tab;
 import static middle_end.IRGenerator.emit;
 import static middle_end.IRGenerator.three_address;
 
-public class Assignment extends Statement {
+public class Assign extends Statement {
     private final VariableCall variable;
     private final Expression expression;
-    public Assignment(final VariableCall variable, final Expression expression) {
+    public Assign(final VariableCall variable, final Expression expression) {
         this.variable = variable;
         this.expression = expression;
     }
@@ -54,5 +55,16 @@ public class Assignment extends Statement {
         final List<Instruction> list = new ArrayList<>(expression.red());
         list.add(new Instruction(InstructionType.POP, new Register(variable.toString()), null));
         return list;
+    }
+    @Override
+    public List<ir.Code> toIR() {
+        /*
+        ir.Operand operand = expression.();
+        return Arrays.asList(
+                new ir.Pop(new ir.Register()),
+                new ir.Pop(new ir.Register()),
+                new ir.Assign(variable.toIR(), )
+        );*/
+        return null;
     }
 }

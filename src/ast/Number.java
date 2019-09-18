@@ -16,4 +16,8 @@ public class Number extends Expression {
     public String toS(int tab) {
         return "" + value;
     }
+    @Override
+    public ir.Operand toIR() {
+        return new ir.Immediate(value);
+    }
 }

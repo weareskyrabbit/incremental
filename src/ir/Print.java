@@ -19,7 +19,12 @@ public class Print implements Code {
     }
 
     @Override
-    public int toWordCode() {
-        return 0x30000000 | (operand.toWordCode() << 16 & 0x00110000);
+    public int toWC() {
+        if (operand instanceof String_) {
+            return 0x30000000 | (operand.toWC() << 16 & 0xff0000);
+        } else {
+            return 0x31000000 | (operand.toWC() << 16 & 0xff0000);
+        }
     }
+    // TODO
 }

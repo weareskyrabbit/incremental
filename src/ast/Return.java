@@ -7,7 +7,9 @@ import middle_end.Register;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static middle_end.IRGenerator._return;
 import static middle_end.IRGenerator.emit;
@@ -41,5 +43,9 @@ public class Return extends Statement {
         list.add(new Instruction(InstructionType.POP, Register.RBP, null));
         list.add(new Instruction(InstructionType.RET, null, null));
         return list;
+    }
+    @Override
+    public List<ir.Code> toIR() {
+        return Collections.singletonList(new ir.Return(expression.toIR()));
     }
 }

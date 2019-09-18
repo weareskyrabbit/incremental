@@ -1,12 +1,12 @@
 package back_end;
 
-import ast.FunctionDeclaration;
+import ast.FunctionDeclare;
 
 import java.util.List;
 
 // TODO change build system
 public class Builder {
-    public String build(final List<FunctionDeclaration> tree) {
+    public String build(final List<FunctionDeclare> tree) {
         final StringBuilder assembly = new StringBuilder(".intel_syntax noprefix\n");
         tree.forEach(method -> assembly.append(method.build()));
         return assembly.toString();

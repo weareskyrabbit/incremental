@@ -18,7 +18,7 @@ public class LocalLabel implements Code {
         return this;
     }
     @Override
-    public int toWordCode() {
+    public int toWC() {
         return 0;
     }
 }

@@ -9,11 +9,11 @@ import java.util.Iterator;
 import static front_end.RecursiveDescentParser.tab;
 import static middle_end.IRGenerator.*;
 
-public class FunctionDeclaration implements Node {
+public class FunctionDeclare implements Node {
     private final String name;
     private final SymbolList arguments;
     private final Closure closure;
-    public FunctionDeclaration(final String name, final SymbolList arguments, final Closure closure) {
+    public FunctionDeclare(final String name, final SymbolList arguments, final Closure closure) {
         this.name = name;
         this.arguments = arguments;
         this.closure = closure;
@@ -62,6 +62,6 @@ public class FunctionDeclaration implements Node {
         return new Function(name, closure.symbols.symbols.size(), closure.gen());
     }
     public ir.Function toIR() {
-        return new ir.Function(name, closure.toIR2());
+        return new ir.Function(name, closure.toIR());
     }
 }

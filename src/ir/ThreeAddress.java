@@ -82,7 +82,30 @@ public class ThreeAddress implements Code {
         return this;
     }
     @Override
-    public int toWordCode() {
-        return 0;
+    public int toWC() {
+        switch (operator) {
+            case "+":
+                return 0x20000000 |
+                        (register.toWC() << 16 & 0xff0000) |
+                        (left.toWC() << 8 & 0xff00) |
+                        right.toWC();
+            case "-":
+                return 0x23000000 |
+                        (register.toWC() << 16 & 0xff0000) |
+                        (left.toWC() << 8 & 0xff00) |
+                        right.toWC();
+            case "*":
+                return 0x26000000 |
+                        (register.toWC() << 16 & 0xff0000) |
+                        (left.toWC() << 8 & 0xff00) |
+                        right.toWC();
+            case "/":
+                return 0x29000000 |
+                        (register.toWC() << 16 & 0xff0000) |
+                        (left.toWC() << 8 & 0xff00) |
+                        right.toWC();
+            default:
+                return 0;
+        }
     }
 }
